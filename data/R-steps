@@ -1,0 +1,92 @@
+
+
+
+From: Daniel Ezra Johnson <john027@usc.edu>
+Date: Tuesday, May 24, 2016 at 12:30 PM
+To: Robert Schuler <schuler@isi.edu>
+Subject: steps in the script
+
+
+    Hi Rob,
+
+    I thought I’d write out the steps in the script, abstracting from the
+ Shiny-related stuff.
+     
+
+    Step 0 – RMA (root mean normalization)
+
+    This was done outside the app, with the rma() function (‘affy’ package)
+
+    It takes the .CEL files as input and does:
+
+    Background correction
+
+    Normalization (the RMA (Robust Multichip Average) expression measure described in Irizarry et al Biostatistics (2003))
+
+    The resulting data is in log2 units (not sure what the scale really is)
+
+     
+    Step 1 — Selects which arrays to compare
+
+     
+
+    Step 2 — Selects what comparisons to make
+
+    One column attribute is the comparison to focus on
+
+    Other column attributes may be “controlled for” — they are in the model
+
+     
+
+    Step 3 — Fitting the model
+
+    The model is fit with the lmFit() function (‘limma’ package).
+
+    This yields coefficients and Benjamini-Hochberg-adjusted p-values.
+
+    The ebayes() function is applied (‘limma’ package), not sure if this actually does anything in this case.
+
+    The p-values are used (along with other settings) as a cut-off in the heat map, the MA plot, and the table of results.
+
+     
+
+    Step 4 — Making the MA plot
+
+    The math here is simple. A is the average expression (x-axis), M is the difference across the comparison of interest (y-axis).
+
+    This could use the coefficients from Step 3 but actually doesn’t, it just uses subtraction.
+
+     
+
+    Step 5 — Making the heat map
+
+    This uses the heatmap.2() function (‘gplots’ package)
+
+    The most important options within the heat map are whether and how to scale the values, and what function to use for the distance metric which is used to produce the input for the clustering (trees) function (the clustering has its own options too, I’m using the default hclust() function).
+
+    I am using cor.dist() from the ‘bioDist’ package, with the option “abs = F” meaning that distance ranges from 0 (correlation = 1) to 2 (correlation = -1). Sometimes the absolute value is used.
+
+    The distance function and scaling and other heatmap options could be changeable by the user.
+
+    The app currently does not scale the values, it subtracts the row means (means for each gene) because differences between genes on the array are not seen as significant anyway. It also subtracts the column means for all column combinations except the one selected.
+
+    This way, other differences are removed and the focus is on one thing at a time.
+
+     
+
+    The feedback I have gotten is to put as much “functionality” into this as possible and allow users to change the options according to what they are doing. A bigger question is how/if we can really compare across experiments/data sets to cover all the array data in Facebase. That would be ideal!
+
+     
+
+    (Also It doesn’t have to be limited to microarray data as far as I can tell. Rna-Seq etc. would work just as well.)
+
+     
+
+    Hope this helps,
+
+    Sorry it is probably quite unclear.
+
+     
+
+    Dan
+

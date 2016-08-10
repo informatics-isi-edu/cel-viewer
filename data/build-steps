@@ -1,0 +1,80 @@
+
+
+Installation
+-----------
+- Install the bioconductor package 'affy'
+# within R
+source("http://bioconductor.org/biocLite.R")
+biocLite("affy")
+
+
+-> https://www.bioconductor.org/packages/release/bioc/html/bioDist.html
+## try http:// if https:// URLs are not supported
+source("https://bioconductor.org/biocLite.R")
+biocLite("bioDist")
+
+>>The downloaded binary packages are in
+>> /var/folders/3d/3p1n9yvs70bfctswfw5s9rph0000gn/T//RtmpdF68Zc/downloaded_packages
+
+--> in R,
+
+install.packages("gplots")
+
+>>The downloaded binary packages are in
+>>/var/folders/3d/3p1n9yvs70bfctswfw5s9rph0000gn/T//Rtmp5LJ8OD/downloaded_packages
+>>Warning message:
+>>In doTryCatch(return(expr), name, parentenv, handler) :
+>>  unable to load shared object '/Library/Frameworks/R.framework/Resources/modules//R_X11.so':
+>>  dlopen(/Library/Frameworks/R.framework/Resources/modules//R_X11.so, 6): Library not loaded: /opt/X11/lib/libSM.6.dylib
+>>  Referenced from: /Library/Frameworks/R.framework/Resources/modules//R_X11.so
+>>  Reason: image not found
+
+>>>>or do it from an R console:
+>>>>system("locate libSM.6.dylib")
+>>>>On my Yosemite install it's in /opt/X11/lib/libSM.6.dylib.
+>>>>If your setup is similar, then:
+>>>>sudo ln -s /usr/X11 /opt/X11 
+
+--
+> install.packages("gplots")
+--- Please select a CRAN mirror for use in this session ---
+trying URL 'https://cran.cnr.berkeley.edu/bin/macosx/mavericks/contrib/3.2/gplots_3.0.1.tgz'
+Content type 'application/x-gzip' length 509176 bytes (497 KB)
+==================================================
+downloaded 497 KB
+
+
+The downloaded binary packages are in
+	/var/folders/3d/3p1n9yvs70bfctswfw5s9rph0000gn/T//RtmpSNq9sO/downloaded_packages
+
+---
+## try http:// if https:// URLs are not supported
+source("https://bioconductor.org/biocLite.R")
+biocLite("limma")
+
+
+-----------------
+DT: An R interface to the DataTables library
+
+install.packages('DT')
+
+-----------------
+## try http:// if https:// URLs are not supported
+source("https://bioconductor.org/biocLite.R")
+biocLite("oligo")
+
+The downloaded binary packages are in
+	/var/folders/3d/3p1n9yvs70bfctswfw5s9rph0000gn/T//RtmpRgRz2X/downloaded_packages
+
+
+---
+in R,  
+
+install.packages("RJSONIO")
+
+downloaded 1.2 MB
+
+
+The downloaded binary packages are in
+	/var/folders/3d/3p1n9yvs70bfctswfw5s9rph0000gn/T//RtmpKxZNJu/downloaded_packages
+
