@@ -1,18 +1,14 @@
 //
-// cel-viewer
+// cel-viewer, maplot
 //
 // Usage example:
-//   http://localhost/cel-viewer/view.html?
-//                   http://localhost/data/CEL/newDatHeatT.csv
+//   http://localhost/cel-viewer/maplot.html?
+//                   url=http://localhost/data/CEL/newMAplotData.csv
 
 
-var inputData=null; // this is in Matrix format [[..][..][..]]
-var inputSamples=null;
+var inputXData=null; 
+var inputYData=null; 
 var inputGenes=null;
-
-var outputXlabel=null;
-var outputYlabel=null;
-var genesAt=null;
 
 // should be a very small file and used for testing and so can ignore
 // >>Synchronous XMLHttpRequest on the main thread is deprecated
@@ -55,14 +51,7 @@ jQuery(document).ready(function() {
      var url=processArgs(args);
      window.console.log("got this url for arg..",url);
      loadCSVFromFile(url);
-     // byGenes
-//     for(var i=0; i<inputSamples.length; i++) {
-//       addCELHistogram(i);
-//     }
-//     addCELAllHistogram();
-//     addCELLineChart(1); // byGenes
-//     addCELLineChart(0); // bySamples
-     addCELHeatmap();
+     addCELMAplot();
   } else {
 window.console.log("humm...");
   }
@@ -98,21 +87,8 @@ window.console.log("bad arg..",kvp[0].trim());
 function loadCSVFromFile(url) {
   var tmp=ckExist(url);
   var data=$.csv.toArrays(tmp);
-  var r=convertCELData(data);
-  inputSamples=r.samples;
+  var r=convertMAplotData(data);
+  inputXdata=r.x;
+  inputYdata=r.y;
   inputGenes=r.genes;
-  inputData=r.data;
-  genesAt=r.type;
-// althouth gene in input is in horizontal, the data is transposed and so
-// the x axis is actually the samples while gene is at y axis
-  if (genesAt == 'horizontal') {
-    outputYlabel=inputGenes;
-    outputXlabel=inputSamples;
-    } else {
-    outputYlabel=inputSamples;
-    outputXlabel=inputGenes;
-  }
-
-  window.console.log("samples are..",inputSamples);
-  window.console.log("genes are..", inputGenes);
 }

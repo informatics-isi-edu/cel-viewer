@@ -320,9 +320,9 @@ dat.top <- dat.sel[rownames(dat.sel) %in% top$Probeset, ]
 
 print("  -- selecting what is in dat.top --")
 print("  rownames(dat.sel)..")
-print(rownames(dat.sel))
+##print(rownames(dat.sel))
 print("  top$Probeset..")
-print(top$Probeset)
+##print(top$Probeset)
 print("  dim(dat.top)..")
 print(dim(dat.top))
 
