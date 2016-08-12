@@ -6,9 +6,24 @@
 //                   url=http://localhost/data/CEL/newMAplotData.csv
 
 
+// blackPts
 var inputXData=null; 
 var inputYData=null; 
 var inputGenes=null;
+var inputTitle=null;
+
+// topPts
+var inputPXXData=null; 
+var inputPYYData=null; 
+var inputPGGenes=null;
+
+var inputNXXData=null; 
+var inputNYYData=null; 
+var inputNGGenes=null;
+
+var inputXlabel=null;
+var inputYlabel=null;
+
 
 // should be a very small file and used for testing and so can ignore
 // >>Synchronous XMLHttpRequest on the main thread is deprecated
@@ -48,9 +63,10 @@ function loadBlobFromJsonFile(fname) {
 jQuery(document).ready(function() {
   var args=document.location.href.split('?');
   if (args.length === 2) {
+     setupColorMap();
      var url=processArgs(args);
-     window.console.log("got this url for arg..",url);
-     loadCSVFromFile(url);
+     var blob=loadBlobFromJsonFile(url);
+     convertMAplotBlobData(blob);
      addCELMAplot();
   } else {
 window.console.log("humm...");

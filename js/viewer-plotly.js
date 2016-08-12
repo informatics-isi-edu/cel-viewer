@@ -153,7 +153,17 @@ function addAPlot(divname, data, layout, w, h) {
   var gd = gd3.node();
   Plotly.newPlot(gd, data, layout);
   return gd;
+// Plotly.newPlot(divname, data, layout);
 }
+
+function relayoutAPlot(gd, update) {
+  Plotly.relayout(gd,update);
+}
+
+function restyleAPlot(gd, update, target) {
+  Plotly.restyle(gd,update, target);
+}
+
 
 function getData(key) {
   var vals = Object.values(inputData[key]);

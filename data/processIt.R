@@ -45,11 +45,11 @@ genes.tab <- xtabs(~unlist(dat$symbol))
 single.genes <- names(genes.tab)[genes.tab == 1]
 
 print("  rownames..")
-print(rownames(dat))
+#print(rownames(dat))
 print("  gene.tab..")
-print(genes.tab)
+#print(genes.tab)
 print("  single.genes..")
-print(single.genes)
+#print(single.genes)
 
 # This identifies which samples the user has selected.
 # The samples called “ones" will be contrasted with those called “twos".
@@ -320,11 +320,13 @@ dat.top <- dat.sel[rownames(dat.sel) %in% top$Probeset, ]
 
 print("  -- selecting what is in dat.top --")
 print("  rownames(dat.sel)..")
-##print(rownames(dat.sel))
+#print(rownames(dat.sel))
 print("  top$Probeset..")
-##print(top$Probeset)
+#print(top$Probeset)
 print("  dim(dat.top)..")
 print(dim(dat.top))
+
+source("processMAplot.R")
 
 # The next part is the heat map. Part of this involves normalizing the data.
 
@@ -355,10 +357,6 @@ dat.heat <- as.matrix(dat.top[, sels])
 
 print("  dim(dat.heat)..")
 print(dim(dat.heat))
-print("  colnames(dat.heat)..")
-print(colnames(dat.heat))
-print("  rownames(dat.heat)..")
-print(rownames(dat.heat))
 
 for (col in colnames(control)){
 for (v in unique(control[, col])){
@@ -377,9 +375,7 @@ if (inputSSlog) {
 
 extreme <- ceiling(10 * extreme) / 10
 
-n <- dat.top$symbol
-print("  data.top$symbol..")
-print(n)
+SYMBOL <- dat.top$symbol
 
 dat.tmp <- as.data.frame(dat.heat)
 
@@ -390,16 +386,27 @@ print(nrow(dat.tmp))
 
 ## ==> transpose the data and then 
 ##     replaced the literal gene into column name
+##     can not replace row name because duplicates is not allowed
 df.heat <- as.data.frame(t(dat.tmp))
-colnames(df.heat) <-n
+colnames(df.heat) <- SYMBOL
 print("  nrow(df.heat)..")
 print(nrow(df.heat))
 print("  rownames(df.heat)..")
 print(rownames(df.heat))
 #write.csv(df.heat,"newDfHeat.csv")
 
-## ==> transposed of the DfHeat back to the shape of newDatTmp
-write.csv(t(df.heat),"newDatHeatT.csv")
+## ==> transposed of the DfHeat back to the shape of dat.heat
+write.csv(t(df.heat),"newHeatmapData.csv")
+
+heatmapList <- list(type='heatmap', symbol=SYMBOL, probeset=rownames(df.heat))
+for (col in colnames(dat.heat)){
+print(col)
+  i <- dat.heat[,col]
+  l <- list( col:i )
+  n <- length(heatmapList)
+  heatmapList[[n]] <- l
+}
+write(toJSON(heatmapList),"newHeatMapData.json", append=FALSE) 
 
 print("  row weights..")
 print(weights)

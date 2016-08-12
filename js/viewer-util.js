@@ -36,6 +36,13 @@ function floatValue(data) {
   return n;
 }
 
+function absValue(data) {
+  var n = data.map(function (v) {
+    return (Math.abs(v));
+  });
+  return n;
+}
+
 //stackoverflow.com/questions/4492678/swap-rows-with-columns-transposition-of-a-matrix-in-javascript
 function transpose(a) {
     return a[0].map(function (_, c) { return a.map(function (r) { return r[c]; }); });
