@@ -376,7 +376,6 @@ if (inputSSlog) {
 extreme <- ceiling(10 * extreme) / 10
 
 SYMBOL <- dat.top$symbol
-
 dat.tmp <- as.data.frame(dat.heat)
 
 ## ==> pure dump of the dat.heat
@@ -398,15 +397,24 @@ print(rownames(df.heat))
 ## ==> transposed of the DfHeat back to the shape of dat.heat
 write.csv(t(df.heat),"newHeatmapData.csv")
 
-heatmapList <- list(type='heatmap', symbol=SYMBOL, probeset=rownames(df.heat))
-for (col in colnames(dat.heat)){
-print(col)
-  i <- dat.heat[,col]
-  l <- list( col:i )
-  n <- length(heatmapList)
-  heatmapList[[n]] <- l
+metaList <- list(type='heatmap')
+PROBESET <- rownames(dat.heat) 
+heatmapList <- list(symbol=SYMBOL, probeset=PROBESET) 
+
+sampleList.names <- colnames(dat.heat)
+sampleList <- vector("list", length(sampleList.names))
+N <- ncol(dat.heat)
+Nlist <- colnames(dat.heat)
+for(i in as.numeric(1:N)) {
+   c <- sampleList.names[[i]]
+   cc<-dat.heat[,c]
+   ccc <- as.vector(cc)
+   l <- list( name=c, data=ccc)
+   sampleList[[i]] <- l
 }
-write(toJSON(heatmapList),"newHeatMapData.json", append=FALSE) 
+heatmapList$samples <- sampleList
+jsonList=list(meta=metaList, data=heatmapList)
+write(toJSON(jsonList),"newHeatMapData.json", append=FALSE) 
 
 print("  row weights..")
 print(weights)

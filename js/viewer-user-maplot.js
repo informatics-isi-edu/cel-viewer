@@ -11,17 +11,40 @@
 //      "xlabel": "Average Expression",
 //      "ylabel": "proximal               Log2 Fold Change               distal" 
 //         },
-// "blackPts": { "x": [ 10.317,..], "y": [ ...], "symbol":[..] },
-// "otherPts": { "x": [ 10.317,..], "y": [ ...], "symbol":[..], "color":[...] },
-// "topPts": { "x": [ 10.317,..], "y": [ ...], "symbol":[..] }
+//  "data" : {
+//      "blackPts": { "x": [ 10.317,..], "y": [ ...], "symbol":[..] },
+//      "otherPts": { "x": [ 10.317,..], "y": [ ...], "symbol":[..], "color":[...] },
+//      "topPts": { "x": [ 10.317,..], "y": [ ...], "symbol":[..] }
+//         }
 // }
+
+function initData() {
+// blackPts
+inputXData=null;
+inputYData=null;
+inputGenes=null;
+inputTitle=null;
+
+// topPts
+inputPXXData=null;
+inputPYYData=null;
+inputPGGenes=null;
+
+inputNXXData=null;
+inputNYYData=null;
+inputNGGenes=null;
+
+inputXlabel=null;
+inputYlabel=null;
+}
 
 // blob is in json blob
 function convertMAplotBlobData(blob) {
+  initData();
   inputXlabel=blob.meta.xlabel;
   inputYlabel=blob.meta.ylabel;
   inputTitle=blob.meta.title;
-  var blackPts=blob.blackPts;
+  var blackPts=blob.data.blackPts;
   inputGenes=blackPts.symbol;
   var t=blackPts.x
   var tt=floatValue(t);
@@ -32,7 +55,7 @@ function convertMAplotBlobData(blob) {
 
 // need to group topPts to two sets
 // positive y and negative y
-  var topPts=blob.topPts;
+  var topPts=blob.data.topPts;
   var inputGGenes=topPts.symbol;
   t=topPts.x
   tt=floatValue(t);

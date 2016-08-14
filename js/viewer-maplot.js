@@ -52,13 +52,6 @@ function chopForStub(url){
   return ss;
 }
 
-// fname is simple json data file converted
-function loadBlobFromJsonFile(fname) {
-  var tmp=ckExist(fname);
-  var blob=(JSON.parse(tmp));
-  return blob;
-}
-
 /*****MAIN*****/
 jQuery(document).ready(function() {
   var args=document.location.href.split('?');

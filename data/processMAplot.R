@@ -67,14 +67,15 @@ topPtsList <-list(x=topX, y=topY, symbol=topSymbol)
       pos = ifelse(dat.top$M > 0, 3, 1), offset = 0.4, cex = 0.9)
     }
 
-jsonList <- list(meta=metaList, blackPts=blackPtsList)
+dataList <- list(blackPts=blackPtsList)
 
 if( !is.null(otherX) && length(otherX) != 0) { 
-  jsonList$otherPts <- otherPtsList
+  dataList$otherPts <- otherPtsList
 }
 if(!is.null(topX) && length(topX)!=0) {
-  jsonList$topPts <- topPtsList
+  dataList$topPts <- topPtsList
 }
+jsonList <- list(meta=metaList, data=dataList)
 write(toJSON(jsonList), "newMAplotData.json", append=FALSE)
 
     ats.0 <- seq(1, 9, 1)

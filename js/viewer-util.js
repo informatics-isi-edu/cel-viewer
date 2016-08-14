@@ -26,6 +26,13 @@ function getColor(idx) {
   var maxColors=colorMap.length;
   return colorMap[idx % maxColors];
 }
+/*********************************************/
+// fname is simple json data file converted
+function loadBlobFromJsonFile(fname) {
+  var tmp=ckExist(fname);
+  var blob=(JSON.parse(tmp));
+  return blob;
+}
 
 /*********************************************/
 
