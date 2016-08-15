@@ -56,13 +56,7 @@ jQuery(document).ready(function() {
     window.console.log("got this url for arg..",url);
     var blob=loadBlobFromJsonFile(url);
     convertCELBlobData(blob);
-     // byGenes
-//    for(var i=0; i<inputSamples.length; i++) {
-//      addCELHistogram(i);
-//    }
-//    addCELAllHistogram();
-//    addCELLineChart(1); // byGenes
-//    addCELLineChart(0); // bySamples
+    addCELAllHistogram();
     addCELHeatmap();
   } else {
 window.console.log("humm...");
