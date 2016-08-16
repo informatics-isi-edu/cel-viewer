@@ -10,10 +10,13 @@ var orderedYlabel=[];
 var tmpLabel=[];
     // red to black to green
 var celColor= [ [0, 'rgb(255,0,0)'],
-                 [0.3, 'rgb(139,0,0)'],
+                 [0.3, 'rgb(100,0,0)'],
                  [0.5, 'rgb(0,0,0)'],
                  [0.7, 'rgb(0,100,0)'],
-                 [1, 'rgb(5,275,5)'] ];
+                 [1, 'rgb(0,255,0)'] ];
+
+var grColor= [ 'rgb(0,139,0)', 'rgb(139,0,0)'];
+var rgColor= [ 'rgb(139,0,0)', 'rgb(0,139,0)' ];
 
 // json blob format
 //{
@@ -195,8 +198,8 @@ function addCELHeatmap() {
   var _ylabel= orderedYlabel;
   var _colors=celColor;
 
-  var _data=getHeatmapsAt(_zval, _xlabel, _ylabel, _colors);
-  var _layout=getHeatmapsDefaultLayout(1000,400);
+  var _data=getHeatmapAt(_zval, _xlabel, _ylabel, _colors);
+  var _layout=getHeatmapDefaultLayout(1000,400);
   addHeatmapPlot(_data,_layout);
 }
 
@@ -295,27 +298,41 @@ function addCELHistogram(idx) {
   var cnt=saveTraceName.length;
   if(cnt < idx) return;
 
-  var _key=saveTraceName[idx];
+  var _xtitle=saveTraceName[idx];
+  var _ytitle='count';
   var _x=saveY[idx];
   var _max=Math.max.apply(Math,_x)+1;
   var _min=Math.min.apply(Math,_x)-1;
 
-  var _data=getHistogramAt(_x,saveColor[idx]);
-  var _layout=getHistogramDefaultLayout(1000,300, _key, [_min,_max]);
+  var _data=getHistogramAt(_x,getColor(idx));
+  var _layout=getHistogramDefaultLayout(1000,300, _xtitle, _ytitle, [_min,_max]);
   addHistogramPlot(_data,_layout);
 }
 
 // includes all the data points
+// split into above and below 0 traces
 function addCELAllHistogram() {
   buildDataComplete();
 
-  var _key="Complete Set";
+  var _xtitle="Complete Set";
+  var _ytitle="Count";
   var _x=saveY;
+  var _pos=[];
+  var _neg=[];
+  var cnt=_x.length;
+
+  for(var i=0; i< cnt; i++) {
+    if(_x[i]>0)
+      _pos.push(_x[i]);
+      else 
+        _neg.push(_x[i]);
+  }
+  
   var _max=Math.max.apply(Math,_x)+1;
   var _min=Math.min.apply(Math,_x)-1;
 
-  var _data=getHistogramAt(_x, saveColor[0]);
-  var _layout=getHistogramDefaultLayout(1000,300, _key, [_min,_max]);
+  var _data=getHistogramsAt( [_pos, _neg], grColor);
+  var _layout=getHistogramsDefaultLayout(1000,300, _xtitle, _ytitle, [_min,_max]);
   addHistogramPlot(_data,_layout);
 }
 

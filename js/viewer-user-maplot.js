@@ -18,6 +18,9 @@
 //         }
 // }
 
+var grTriColor= [ getColor(0), 'rgb(0,139,0)', 'rgb(139,0,0)' ];
+var rgTriColor= [ getColor(0), 'rgb(139,0,0)', 'rgb(0,139,0)' ];
+
 function initData() {
 // blackPts
 inputXData=null;
@@ -119,7 +122,7 @@ function addCELMAplot() {
   var _title=inputTitle;
   var _x=[inputXdata, inputPXXdata, inputNXXdata];
   var _y=[inputYdata, inputPYYdata, inputNYYdata];
-  var _colors=[getColor(0), getColor(1), getColor(3)];
+  var _colors=grTriColor;
   var _text=[inputPGGenes, inputNGGenes];
 
 
@@ -135,23 +138,23 @@ function addCELMAplot() {
 
   var _data=getLinesAt(_x, _y, _colors);
   var _layout=getLinesDefaultLayout(1000, 500);
-  addLinePlot(_data,_layout);
-  addRestyleChanges(_text, [1,2]);
-  addLayoutChanges(_title, _xmin, _xmax, _xlabel, [_xmin,_xmax],
+  var _aPlot=addLinePlot(_data,_layout);
+  addRestyleChanges(_aPlot,_text, [1,2]);
+  addLayoutChanges(_aPlot,_title, _xmin, _xmax, _xlabel, [_xmin,_xmax],
                       2, -2, _ylabel, [_ymin,_ymax]);
 }
 
-function addRestyleChanges(_text, target) {
+function addRestyleChanges(_aPlot,_text, target) {
   var _update = {
     text:_text,
     textfont : { family:'Times New Roman' },
     textposition: ['top center','bottom center'],
     mode: [ 'markers+text', 'markers+text' ]
   }
-  restyleLinePlot(_update,target);
+  restyleLinePlot(_aPlot,_update,target);
 }
 
-function addLayoutChanges(_title,_x0,_x1,xtitle,xrange,_y0,_y1,ytitle,yrange) {
+function addLayoutChanges(_aPlot,_title,_x0,_x1,xtitle,xrange,_y0,_y1,ytitle,yrange) {
   var _update = {
      title: _title,
      xaxis: { title: xtitle, range:xrange},
@@ -168,6 +171,6 @@ function addLayoutChanges(_title,_x0,_x1,xtitle,xrange,_y0,_y1,ytitle,yrange) {
               line: { width: 1 }
               }]
       };
-  relayoutLinePlot(_update);
+  relayoutLinePlot(_aPlot,_update);
 }
 

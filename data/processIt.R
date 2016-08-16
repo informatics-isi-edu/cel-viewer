@@ -39,7 +39,8 @@ rownames(full.design) <- paste0(age, bone, place, 1:3)
               t <- try(load(con))
               close(con)
               if (!inherits(t, "try-error")) break}
-
+print("head of danfile.R")
+print(head(dat))
 rownames(dat) <- dat[, "probeset"]
 genes.tab <- xtabs(~unlist(dat$symbol))
 single.genes <- names(genes.tab)[genes.tab == 1]

@@ -1,19 +1,19 @@
 //
-// viewer-lines.js
+// viewer-plotly-lines.js
 //
 // multiple lines, x,y,trace are all array of individual parts
 
-var saveLinePlot=null;
 function addLinePlot(_data,_layout) {
-   saveLinePlot=addAPlot('#myViewer',_data, _layout, {displaylogo: false});
+   var aLinePlot=addAPlot('#myViewer',_data, _layout, {displaylogo: false});
+   return aLinePlot;
 }
 
-function relayoutLinePlot(update) {
-  relayoutAPlot(saveLinePlot,update);
+function relayoutLinePlot(aLinePlot,update) {
+  relayoutAPlot(aLinePlot,update);
 }
 
-function restyleLinePlot(update, target=null) {
-  restyleAPlot(saveLinePlot,update,target);
+function restyleLinePlot(aLinePlot, update, target=null) {
+  restyleAPlot(aLinePlot,update,target);
 }
 
 

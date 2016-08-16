@@ -1,14 +1,15 @@
 //
-// viewer-heatmaps.js
+// viewer-plotly-heatmaps.js
 // 
 // zval is a matrix, [ [...][...][...] ]
 //
 
 function addHeatmapPlot(_data,_layout) {
-   savePlot=addAPlot('#myViewer',_data, _layout, {displaylogo: false});
+   var aPlot=addAPlot('#myViewer',_data, _layout, {displaylogo: false});
+   return aPlot;
 }
 
-function getHeatmapsAt(zval,xlabel,ylabel,cval) {
+function getHeatmapAt(zval,xlabel,ylabel,cval) {
   var maxList=[];
   var minList=[];
   zval.forEach(function(arr) {
@@ -30,7 +31,7 @@ function getHeatmapsAt(zval,xlabel,ylabel,cval) {
   return t;
 }
 
-function getHeatmapsDefaultLayout(w,h){
+function getHeatmapDefaultLayout(w,h){
   var p= {
         width: w,
         height: h 
