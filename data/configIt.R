@@ -1,33 +1,43 @@
 
-inputSFile <- "http://localhost/data/CEL/danfile.R"
+setConfig_f <- function() {
+
+localCONFIG<-list()
+
+localCONFIG$inputFile <- "http://localhost/data/CEL/danfile.R"
 ## "E10.5_Mnd_D", "E11.5_Mnd_D", "E12.5_Mnd_D", "E13.5_Mnd_D", "E14.5_Mnd_D",
 ## "E10.5_Mnd_P", "E11.5_Mnd_P", "E12.5_Mnd_P", "E13.5_Mnd_P", "E14.5_Mnd_P",
 ## "E10.5_Max_D", "E11.5_Max_D", "E12.5_Max_D", "E13.5_Max_D", "E14.5_Max_D",
 ## "E10.5_Max_P", "E11.5_Max_P", "E12.5_Max_P", "E13.5_Max_P", "E14.5_Max_P"),
-inputSSsel <- c("E10.5_Mnd_D","E10.5_Mnd_P")
+localCONFIG$sel <- c("E10.5_Mnd_D","E10.5_Mnd_P")
 ## "place", "age", "bone"
-inputSScomp <- "place"
+localCONFIG$comp <- "place"
 ## "normal", "inverted"
-inputSSinvertSplace <- "normal"
+localCONFIG$invert_place <- "normal"
+localCONFIG$invert_bone <- "normal"
+localCONFIG$invert_age <- "normal"
 ## "all probesets" = "Z",
 ## "most highly expressed probeset" = "A",
 ## "most differentially expressed probeset" = "M")
-inputSSsummary <- "Z"
-inputSSfdr <- 0.01
-inputSSfc <- 2.0
-inputSSmax <- "Inf"
+localCONFIG$summary <- "Z"
+localCONFIG$fdr <- 0.01
+localCONFIG$fc <- 2.0
+localCONFIG$max <- "Inf"
 ## "log"(0), "log2"(1) 
-inputSSlog <- 1
+localCONFIG$log <- 1
 ## "rg", "gr"
-inputSSheatcol <- "rg"
-inputSScol1 <- ""
-inputSScol2 <- ""
-inputSScol3 <- ""
-inputSScol4 <- ""
-inputSScol5 <- ""
-inputSSgene1 <- ""
-inputSSgene2 <- ""
-inputSSgene3 <- ""
-inputSSgene4 <- ""
-inputSSgene5 <- ""
+localCONFIG$heatcol <- "rg"
+# user specified color to particular gene
+localCONFIG$col1 <- ""
+localCONFIG$col2 <- ""
+localCONFIG$col3 <- ""
+localCONFIG$col4 <- ""
+localCONFIG$col5 <- ""
+localCONFIG$gene1 <- ""
+localCONFIG$gene2 <- ""
+localCONFIG$gene3 <- ""
+localCONFIG$gene4 <- ""
+localCONFIG$gene5 <- ""
+
+return(localCONFIG)
+}
 

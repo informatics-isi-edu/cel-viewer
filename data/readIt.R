@@ -19,12 +19,14 @@ print(ncol(myEset))
 print(nrow(myEset))
 
 probeset <- rownames(exprs(myEset)) # probesets like 123456_at
-myEset <- rbind(myEset,probeset)
-#myEset$symbol <- lookUp(ps, "mouse4302.db", "SYMBOL")
-#myEset$desc <- lookUp(ps, "mouse4302.db", "GENENAME")
+symbol <- lookUp(probeset, "mouse4302.db", "SYMBOL")
+desc <- lookUp(probeset, "mouse4302.db", "GENENAME")
+myExpr <- exprs(myEset)
+Expr <-as.data.frame(myExpr)
+`
 
-save.csv(myEset,"myEset.R")
-write.csv(exprs(myEset), file = “myExprs.csv”)
+#save.csv(myEset,"myEset.R")
+#write.csv(exprs(myEset), file = “myExprs.csv”)
 ##exprs(myEset) ## readable form,
 ## dump into csv, 
 #write.csv(myEset, file = "myEsetMatrix.csv")
