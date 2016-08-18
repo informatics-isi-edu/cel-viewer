@@ -1,13 +1,23 @@
 //
-// cel-viewer/viewer-user.js
+// cel-viewer/viewer-user-heatmap.js
 //
 // This is very user/dataset specific information
 // for, USC
+
+
+var inputData=[]; // this is in Matrix format [[..][..][..]]
+var inputSamples=[];
+var inputGenes=null;
+
+var outputXlabel=null;
+var outputYlabel=null;
+var genesAt=null;
 
 var orderedLeaf=[];
 var orderedXlabel=[];
 var orderedYlabel=[];
 var tmpLabel=[];
+
     // red to black to green
 var celColor= [ [0, 'rgb(255,0,0)'],
                  [0.3, 'rgb(100,0,0)'],
@@ -37,6 +47,30 @@ function initData() {
   genesAt='horizontal';
   outputXlabel=null;
   outputYlabel=null;
+}
+
+
+// not really in use
+function loadHeatmapCSVFromFile(url) {
+  var tmp=ckExist(url);
+  var data=$.csv.toArrays(tmp);
+  var r=convertCELData(data);
+  inputSamples=r.samples;
+  inputGenes=r.genes;
+  inputData=r.data;
+  genesAt=r.type;
+// althouth gene in input is in horizontal, the data is transposed and so
+// the x axis is actually the samples while gene is at y axis
+  if (genesAt == 'horizontal') {
+    outputYlabel=inputGenes;
+    outputXlabel=inputSamples;
+    } else {
+    outputYlabel=inputSamples;
+    outputXlabel=inputGenes;
+  }
+
+  window.console.log("samples are..",inputSamples);
+  window.console.log("genes are..", inputGenes);
 }
 
 // blob is in json blob

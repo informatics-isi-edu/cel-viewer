@@ -2,8 +2,9 @@
 // cel-viewer, heatmap
 //
 // Usage example:
-//   http://localhost/cel-viewer/heatmap.html?
-//                   url=http://localhost/data/CEL/newHeatmapData.json
+//   http://localhost/cel-viewer/view.html?
+//         url=http://localhost/data/CEL/HeatmapData.json
+//         &url=http://localhost/data/CEL/MAplotData.json
 
 
 // should be a very small file and used for testing and so can ignore
@@ -44,12 +45,21 @@ function loadBlobFromJsonFile(fname) {
 jQuery(document).ready(function() {
   var args=document.location.href.split('?');
   if (args.length === 2) {
-    var url=processArgs(args);
-    window.console.log("got this url for arg..",url);
-    var blob=loadBlobFromJsonFile(url);
-    convertCELBlobData(blob);
-    addCELAllHistogram();
-    addCELHeatmap();
+    var urls=processArgs(args);
+    for(var i=0;i<urls.length;i++) {
+      var blob=loadBlobFromJsonFile(urls[i]);
+window.console.log("processing --",blob.meta.type);
+      if(blob.meta.type == "heatmap") {
+        convertCELBlobData(blob);
+        addCELAllHistogram();
+        addCELHeatmap();
+        } else {
+          setupColorMap();
+          var blob=loadBlobFromJsonFile(urls[i]);
+          convertMAplotBlobData(blob);
+          addCELMAplot();
+      }
+    }
   } else {
 window.console.log("humm...");
   }
@@ -57,7 +67,8 @@ window.console.log("humm...");
 
 
 function processArgs(args) {
-  var url="";
+  var urls=[];
+  var url=null;;
   var params = args[1].split('&');
   for (var i=0; i < params.length; i++) {
     var param = unescape(params[i]);
@@ -77,6 +88,7 @@ window.console.log("bad arg..",kvp[0].trim());
              }
        }
     }
+    urls.push(url);
   }
-  return url;
+  return urls;
 }

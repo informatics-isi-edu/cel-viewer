@@ -23,7 +23,6 @@ symbol <- lookUp(probeset, "mouse4302.db", "SYMBOL")
 desc <- lookUp(probeset, "mouse4302.db", "GENENAME")
 myExpr <- exprs(myEset)
 Expr <-as.data.frame(myExpr)
-`
 
 #save.csv(myEset,"myEset.R")
 #write.csv(exprs(myEset), file = “myExprs.csv”)

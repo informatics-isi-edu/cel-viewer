@@ -3,26 +3,7 @@
 //
 // Usage example:
 //   http://localhost/cel-viewer/maplot.html?
-//                   url=http://localhost/data/CEL/newMAplotData.csv
-
-
-// blackPts
-var inputXData=null; 
-var inputYData=null; 
-var inputGenes=null;
-var inputTitle=null;
-
-// topPts
-var inputPXXData=null; 
-var inputPYYData=null; 
-var inputPGGenes=null;
-
-var inputNXXData=null; 
-var inputNYYData=null; 
-var inputNGGenes=null;
-
-var inputXlabel=null;
-var inputYlabel=null;
+//                   url=http://localhost/data/CEL/newMAplotData.json
 
 
 // should be a very small file and used for testing and so can ignore
@@ -90,14 +71,4 @@ window.console.log("bad arg..",kvp[0].trim());
     }
   }
   return url;
-}
-
-
-function loadCSVFromFile(url) {
-  var tmp=ckExist(url);
-  var data=$.csv.toArrays(tmp);
-  var r=convertMAplotData(data);
-  inputXdata=r.x;
-  inputYdata=r.y;
-  inputGenes=r.genes;
 }

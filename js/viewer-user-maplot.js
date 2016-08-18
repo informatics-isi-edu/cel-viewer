@@ -18,6 +18,24 @@
 //         }
 // }
 
+// blackPts
+var inputXData=null; 
+var inputYData=null; 
+var inputGenes=null;
+var inputTitle=null;
+
+// topPts
+var inputPXXData=null; 
+var inputPYYData=null; 
+var inputPGGenes=null;
+
+var inputNXXData=null; 
+var inputNYYData=null; 
+var inputNGGenes=null;
+
+var inputXlabel=null;
+var inputYlabel=null;
+
 var grTriColor= [ getColor(0), 'rgb(0,139,0)', 'rgb(139,0,0)' ];
 var rgTriColor= [ getColor(0), 'rgb(139,0,0)', 'rgb(0,139,0)' ];
 
@@ -85,36 +103,6 @@ function convertMAplotBlobData(blob) {
     }
   }
 }
-
-/* --> in csv format
-    ""     X   Y
-    gene1
-    gene2
-*/
-function convertMAplotData(iData) {
-  var _data=transpose(iData);
-  var gData=[]; // columnnames
-  var xData=[];
-  var yData=[];
-  var sz=_data.length;
-  for(var i=0; i<sz; i++) {
-     var t=_data[i]; // Arrays
-     var tmp=t.shift();
-     if(tmp === "") {  // grab column names
-       gData=t;
-       continue;
-       } else { // regular row, rowname, and data..
-         var tt=floatValue(t);
-         if(tmp === "X") { 
-            xData=tt;
-            } else {
-              yData=tt;
-         }
-     }
-  }
-  return { 'genes':gData, 'x':xData, 'y':yData };
-}
-
 
 function addCELMAplot() {
   var _xlabel=inputXlabel;
