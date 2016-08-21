@@ -4,9 +4,28 @@
 //  data files for cel-viewer 
 //
 // Usage example:
-//   http://localhost/cel-viewer/mmm.html?
-//         url=http://localhost/data/CEL/PLOTS/usc/plot-list
+//   https://localhost/cel-viewer/matrix.html?
+//         url=https://localhost/data/CEL/PLOTS/usc/plot-list.json
 //
+
+var plotDataPath=null; // usually where the json file is
+function chopPath(_url)
+{
+  var _a = document.createElement("a");
+  _a.href = _url;
+  var _path=_a.pathname;
+// in IE case, path does not have leading '/'
+  if(_path[0] != '/')
+    _path="/"+_path;
+  var _i= _path.lastIndexOf("/");
+window.console.log(_path);
+window.console.log(_i);
+  if(_i) {
+    _path=_path.substr(0,_i+1);
+  }
+  window.console.log("_path is", _path);
+  return _path;
+};
 
 /*****MAIN*****/
 jQuery(document).ready(function() {
@@ -20,6 +39,7 @@ jQuery(document).ready(function() {
     for(var i=0; i<_urls.length; i++) {
       var _url=_urls[i];
       var _blob=loadBlobFromJsonFile(_url);
+      plotDataPath=chopPath(_url); 
       var _blist=_blob.list;
       for(var j=0; j<_blist.length; j++) {
          var _c=_blist[j].col;
@@ -118,9 +138,9 @@ function cellModal(cLabel, rLabel) {
   var _title=cLabel+" + "+rLabel;
   var _c = shortName(cLabel);
   var _r = shortName(rLabel);
-  var _dir = _c+'_'+_r;
-  var _datapath='view.html?data=/data/CEL/PLOTS/usc/'+_dir+'/MAplotData.json';
-  var _datapath2='view.html?data=/data/CEL/PLOTS/usc/'+_dir+'/HeatmapData.json';
+  var _dirpath = plotDataPath+_c+'_'+_r;
+  var _datapath='view.html?data='+_dirpath+'/MAplotData.json';
+  var _datapath2='view.html?data='+_dirpath+'/HeatmapData.json';
 
   var _c='<div class="exp-div" data-toggle="modal" title="'+_title+
 		   '" data-target="#exp-modal" >';
