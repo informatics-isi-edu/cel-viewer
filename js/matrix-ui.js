@@ -6,6 +6,8 @@
 // Usage example:
 //   https://localhost/cel-viewer/matrix.html?
 //         url=https://localhost/data/CEL/PLOTS/usc/plot-list.json
+//  https://dev.facebase.org/~mei/cel-viewer/matrix.html?
+//          https://dev.facebase.org/~mei/data/CEL/PLOTS/usc/plot-list.json
 //
 
 var plotDataPath=null; // usually where the json file is

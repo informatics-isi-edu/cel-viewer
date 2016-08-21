@@ -257,7 +257,8 @@ function buildDataComplete() {
    var _data=inputData;
    var rows=_data.length;
    for( var i=0; i< rows; i++) {
-     var vals = Object.values(_data[i]);
+//     var vals = Object.values(_data[i]);
+     var vals = _data[i];
      var fvals= vals.map(function(v) { return parseFloat(v); } );
      saveY.push(fvals);
    };

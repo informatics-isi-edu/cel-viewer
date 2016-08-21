@@ -12,7 +12,7 @@ function relayoutLinePlot(aLinePlot,update) {
   relayoutAPlot(aLinePlot,update);
 }
 
-function restyleLinePlot(aLinePlot, update, target=null) {
+function restyleLinePlot(aLinePlot, update, target) {
   restyleAPlot(aLinePlot,update,target);
 }
 
