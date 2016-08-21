@@ -132,6 +132,11 @@ names(control) <- control.cols
 
 if (!nrow(design) | !target.col %in% colnames(design) | !all(sels %in% c(ones, twos))) return({
 print("BAD BAD BAD")
+print(nrow(design))
+print(target.col)
+print(colnames(design))
+print(c(ones,twos))
+print(sels)
 data.frame(NULL)})
 
 
@@ -328,7 +333,10 @@ if(!is.null(topX) && length(topX)!=0) {
   dataList$topPts <- topPtsList
 }
 jsonList <- list(meta=metaList, data=dataList)
-write(toJSON(jsonList), "MAplotData.json", append=FALSE)
+dir <- gsub(" ", "_", MAINLAB)
+dir.create(dir)
+maplotfn <- paste0(dir, "/", "MAplotData.json")
+write(toJSON(jsonList), maplotfn, append=FALSE)
 
     ats.0 <- seq(1, 9, 1)
     ats <- c(-1 * rev(ats.0), 0, ats.0)
@@ -393,7 +401,7 @@ colnames(df.heat) <- SYMBOL
 #write.csv(df.heat,"newDfHeat.csv")
 
 ## ==> transposed of the DfHeat back to the shape of dat.heat
-write.csv(t(df.heat),"HeatmapData.csv")
+#write.csv(t(df.heat),"HeatmapData.csv")
 
 metaList <- list(type='heatmap', title=MAINLAB)
 PROBESET <- rownames(dat.heat) 
@@ -409,9 +417,11 @@ for(i in as.numeric(1:N)) {
    l <- list( name=c, data=ccc)
    sampleList[[i]] <- l
 }
+
 heatmapList$samples <- sampleList
 jsonList=list(meta=metaList, data=heatmapList)
-write(toJSON(jsonList),"HeatMapData.json", append=FALSE) 
+heatmapfn <- paste0(dir, "/", "HeatmapData.json")
+write(toJSON(jsonList),heatmapfn, append=FALSE) 
 
 ### trying hclust
 #print("  -- START CLUSTERING --")

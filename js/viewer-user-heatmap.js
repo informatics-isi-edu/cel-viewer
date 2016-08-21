@@ -348,7 +348,7 @@ function addCELHistogram(idx) {
 function addCELAllHistogram() {
   buildDataComplete();
 
-  var _xtitle="Complete Set";
+  var _xtitle="Complete set";
   var _ytitle="Count";
   var _x=saveY;
   var _pos=[];
