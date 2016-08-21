@@ -328,7 +328,7 @@ if(!is.null(topX) && length(topX)!=0) {
   dataList$topPts <- topPtsList
 }
 jsonList <- list(meta=metaList, data=dataList)
-write(toJSON(jsonList), "newMAplotData.json", append=FALSE)
+write(toJSON(jsonList), "MAplotData.json", append=FALSE)
 
     ats.0 <- seq(1, 9, 1)
     ats <- c(-1 * rev(ats.0), 0, ats.0)
@@ -393,9 +393,9 @@ colnames(df.heat) <- SYMBOL
 #write.csv(df.heat,"newDfHeat.csv")
 
 ## ==> transposed of the DfHeat back to the shape of dat.heat
-write.csv(t(df.heat),"newHeatmapData.csv")
+write.csv(t(df.heat),"HeatmapData.csv")
 
-metaList <- list(type='heatmap')
+metaList <- list(type='heatmap', title=MAINLAB)
 PROBESET <- rownames(dat.heat) 
 heatmapList <- list(symbol=SYMBOL, probeset=PROBESET) 
 
@@ -411,7 +411,7 @@ for(i in as.numeric(1:N)) {
 }
 heatmapList$samples <- sampleList
 jsonList=list(meta=metaList, data=heatmapList)
-write(toJSON(jsonList),"newHeatMapData.json", append=FALSE) 
+write(toJSON(jsonList),"HeatMapData.json", append=FALSE) 
 
 ### trying hclust
 #print("  -- START CLUSTERING --")

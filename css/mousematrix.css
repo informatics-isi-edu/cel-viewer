@@ -1,0 +1,215 @@
+@media screen and (max-width: 1175px) {
+  .experiment-table {
+    overflow-x: scroll;
+  }
+}
+.matrix-intro {
+  margin-bottom: 10px;
+}
+
+.experiment-table .mousematrix, .experiment-table .mousematrix td {
+  height: 25px; /*IE BUG*/
+}
+.experiment-table td, .experiment-table th {
+  font-size: 13px;
+  font-weight: normal;
+  padding: 0 !important;
+}
+.experiment-table th{
+  height: 15px; /* height of colors legend */
+}
+
+.experiment-table .row-header {
+  text-align: right;
+  border-left: 0;
+  border-top: 0;
+  border-bottom: 0;
+  padding: 3px !important;
+}
+.experiment-table table {
+  border: 0;
+}
+.experiment-table .rotate {
+  white-space: nowrap;
+  border: 0;
+  height: 160px; /*header height*/
+}
+
+.experiment-table .rotate div { /*rotate column headers*/
+  width: 25px; /* mousematrix cell width */
+  -webkit-transform: translate(9px, -4px) rotate(315deg);
+  -ms-transform: translate(9px, -4px) rotate(315deg);
+  transform: translate(9px, -4px) rotate(315deg);
+}
+
+/*------------------------- mousematrix cell --------------------------*/
+.exp-color-1 {
+  background: #d53e4f;
+}
+
+.exp-color-2 {
+  background: #f46d43;
+}
+
+.exp-color-3 {
+  background: #fdae61;
+}
+
+.exp-color-4 {
+  background: #fee08b;
+}
+
+.exp-color-5 {
+  background: #abdda4;
+}
+
+.exp-color-7 {
+  background: #66c2a5;
+}
+
+.exp-color-8 {
+  background: #6fa2ff;
+}
+
+.exp-color-9 {
+  background: #6a5acd;
+}
+
+.solo-exp {
+  width: 100%;
+  height: 100%;
+}
+
+.two-exp {
+  width: 50%;
+  height: 100%;
+  float: left;
+}
+
+.three-exp {
+  width: 33.33%;
+  height: 100%;
+  float: left;
+}
+
+.exp-div {
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+}
+.head-div, .type-div{
+  cursor: pointer;
+}
+
+.exp-div .modal-content, .head-div .modal-content, .type-div .modal-content {
+  display: none;
+}
+
+/*------------------------------- hover ------------------------------*/
+.experiment-table .mousematrix tr:not(.features):hover {
+  background-color: #f5f5f5;
+}
+.experiment-table .hover{
+  background-color: #f5f5f5;
+}
+.experiment-table .hover.rotate,.experiment-table .hover.head-div{
+  background: transparent;
+}
+.type-div:hover{
+  font-weight: bold;
+}
+.experiment-table .mousematrix tr:not(.features):hover th, .experiment-table .mousematrix th .head-div.hover{
+  font-weight: bold;
+}
+.experiment-table .text-center.rotate.hover div,.experiment-table .text-center.rotate div:hover{
+  font-weight: bold;
+  background: transparent;
+}
+
+/*-------------------------- legend table ----------------------------*/
+.experiment-table .table-legend .colors {
+  padding: 1px;
+}
+
+.experiment-table .table-legend .colors td {
+  height: 100px;
+  vertical-align: top;
+}
+
+.experiment-table .table-legend {
+  margin: 20px auto;
+}
+
+.experiment-table .table-legend td {
+  white-space: nowrap;
+}
+
+.experiment-table .table-legend td > div {
+  width: 55px;
+  -webkit-transform: translate(20px, 13px) rotate(395deg);
+  -ms-transform: translate(20px, 13px) rotate(395deg);
+  transform: translate(20px, 13px) rotate(395deg);
+}
+
+/*-------------------------- modal ----------------------------*/
+#exp-modal .modal-body {
+  position: relative;
+  padding-bottom: 0;
+}
+
+#exp-modal .modal-header{
+  margin-bottom: 20px;
+}
+
+#exp-modal .modal-body h5 {
+  margin-top: 10px;
+}
+
+#exp-modal div.modal-footer {
+  margin-top: 25px;
+  position: relative;
+}
+
+#exp-modal div.modal-body .content-here {
+  padding: 0 25px 25px;
+}
+
+#exp-modal div.moda-body{
+  padding-bottom: 25px;
+}
+
+#exp-modal .modal-nav-btn {
+  position: absolute;
+  cursor: pointer;
+  font-size: 1.3em;
+}
+
+#next-feature {
+  top: 50%;
+  right: 15px;
+}
+
+#prev-feature {
+  top: 50%;
+  left: 15px;
+}
+
+#next-age {
+  bottom: 60px;
+  left: 48%;
+}
+
+#prev-age {
+  top: 50px;
+  left: 48%;
+}
+#exp-modal .glyphicon-chevron-left.up,#exp-modal .glyphicon-chevron-right.down {
+  transform: rotate(+90deg);
+  -webkit-transform: rotate(+90deg);
+  -moz-transform: rotate(+90deg);
+  -ms-transform: rotate(+90deg);
+  -o-transform: rotate(+90deg);
+
+}
+
+

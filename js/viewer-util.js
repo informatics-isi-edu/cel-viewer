@@ -26,13 +26,6 @@ function getColor(idx) {
   var maxColors=colorMap.length;
   return colorMap[idx % maxColors];
 }
-/*********************************************/
-// fname is simple json data file converted
-function loadBlobFromJsonFile(fname) {
-  var tmp=ckExist(fname);
-  var blob=(JSON.parse(tmp));
-  return blob;
-}
 
 /*********************************************/
 
@@ -81,4 +74,76 @@ function rangeItByTime(p,minIdx,maxIdx) {
 }
 
 
+/*********************************************/
 
+function processArgs(args) {
+  var urls=[];
+  var url=null;;
+  var params = args[1].split('&');
+  for (var i=0; i < params.length; i++) {
+    var param = unescape(params[i]);
+    if (param.indexOf('=') == -1) {
+      url=param.replace(new RegExp('/$'),'').trim();
+      } else {
+        var kvp = param.split('=');
+        switch (kvp[0].trim()) {
+          case 'url':
+             {
+             url=kvp[1].replace(new RegExp('/$'),'').trim();
+             break;
+             }
+          case 'data': // prepend protocol/hostname/port to it
+             {
+             var full = location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: '');
+window.console.log("full is..",full);
+             url=kvp[1].replace(new RegExp('/$'),'').trim();
+window.console.log(url);
+             url=full+url;
+window.console.log("finally,",url);
+             }
+          default:
+             {
+window.console.log("bad arg..",kvp[0].trim());
+             }
+       }
+    }
+    urls.push(url);
+  }
+  return urls;
+}
+
+
+// should be a very small file and used for testing and so can ignore
+// >>Synchronous XMLHttpRequest on the main thread is deprecated
+// >>because of its detrimental effects to the end user's experience.
+function ckExist(url) {
+  var http = new XMLHttpRequest();
+  http.onreadystatechange = function () {
+    if (this.readyState == 4) {
+// okay
+//      window.console.log("okay in readyState..");
+    }
+  }
+  http.open("GET", url, false);
+  http.send();
+  if(http.status !== 404) {
+    return http.responseText;
+    } else {
+      return null;
+  }
+};
+
+// for sure that it is X.json
+function chopForStub(url){
+  var s=url.split('/').pop();
+  var ss=s.slice(0, -5);
+  return ss;
+}
+
+// fname is simple json data file converted
+function loadBlobFromJsonFile(fname) {
+  var tmp=ckExist(fname);
+window.console.log("looking to open ..",fname);
+  var blob=(JSON.parse(tmp));
+  return blob;
+}
