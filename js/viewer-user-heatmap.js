@@ -279,11 +279,9 @@ function toggleContour() {
     if(withContour) {
       addStyleChangesHeatmapType(_p, "contour", null);
       _c.style.color='red';
-      _c.value='no Contour';
       } else {
       addStyleChangesHeatmapType(_p, "heatmap", null);
       _c.style.color='black';
-      _c.value='Contour';
     }
   }
 }
@@ -291,17 +289,14 @@ function toggleContour() {
 function updateGeneCluster(newDistance) { // this is to change the gene(column distance only)
 // newDistance, 'Eucliidean', 'Manhattan', or 'Max'
   if(newDistance == 'Euclidean') {
-window.console.log("call foo Euclidean");
     saveAHeatmapPlot=updateCELHeatmapClustering(clusterfck.EUCLIDEAN_DISTANCE, clusterfck.EUCLIDEAN_DISTANCE, clusterfck.COMPLETE_LINKAGE, clusterfck.COMPLETE_LINKAGE);
     return;
   }
   if(newDistance == 'Manhattan') {
-window.console.log("call foo Manhattan");
     saveAHeatmapPlot=updateCELHeatmapClustering(clusterfck.MANHATTAN_DISTANCE, clusterfck.EUCLIDEAN_DISTANCE, clusterfck.COMPLETE_LINKAGE, clusterfck.COMPLETE_LINKAGE);
     return;
   }
   if(newDistance == 'Max') {
-window.console.log("call foo Max");
     saveAHeatmapPlot=updateCELHeatmapClustering(clusterfck.MAX_DISTANCE, clusterfck.EUCLIDEAN_DISTANCE, clusterfck.COMPLETE_LINKAGE, clusterfck.COMPLETE_LINKAGE);
     return;
   }
