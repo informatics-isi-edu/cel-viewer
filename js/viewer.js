@@ -6,6 +6,8 @@
 //         url=http://localhost/data/CEL/HeatmapData.json
 //         &url=http://localhost/data/CEL/MAplotData.json
 
+var saveAHeatmapPlot=null;
+var saveAMAplot=null;
 
 /*****MAIN*****/
 jQuery(document).ready(function() {
@@ -18,12 +20,13 @@ window.console.log("processing --",blob.meta.type);
       if(blob.meta.type == "heatmap") {
         convertCELBlobData(blob);
         addCELAllHistogram();
-        addCELHeatmap();
+        saveAHeatmapPlot=addCELHeatmap();
+        setupHeatmapControl();
         } else {
           setupColorMap();
           var blob=loadBlobFromJsonFile(urls[i]);
           convertMAplotBlobData(blob);
-          addCELMAplot();
+          saveAMAplot=addCELMAplot();
       }
     }
   } else {

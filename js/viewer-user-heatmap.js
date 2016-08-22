@@ -28,6 +28,8 @@ var celColor= [ [0, 'rgb(255,0,0)'],
 var grColor= [ 'rgb(0,139,0)', 'rgb(139,0,0)'];
 var rgColor= [ 'rgb(139,0,0)', 'rgb(0,139,0)' ];
 
+var withContour=false;
+
 // json blob format
 //{
 // "meta": {
@@ -47,8 +49,8 @@ function initData() {
   genesAt='horizontal';
   outputXlabel=null;
   outputYlabel=null;
+  withContour=false;
 }
-
 
 // not really in use
 function loadHeatmapCSVFromFile(url) {
@@ -196,7 +198,7 @@ function resetOrderedData() {
 }
 
 // rowOrder, columnOrder
-function callHclust() {
+function callHclust(distanceColumn,distanceRow,linkColumn,linkRow) {
   resetOrderedData();
 
   var data = inputData;
@@ -205,7 +207,8 @@ function callHclust() {
     data=transpose(data);
   } 
   var rowOrder, columnOrder;
-  var tree = clusterfck.hcluster(data, clusterfck.EUCLIDEAN_DISTANCE, clusterfck.COMPLETE_LINKAGE);
+// cluster genes
+  var tree = clusterfck.hcluster(data, distanceColumn,linkColumn);
   // tree is an array 
   postOrder(data,tree[0]);
 
@@ -218,14 +221,17 @@ function callHclust() {
 
   tmpLabel=[];
   n_data=transpose(n_leaf);
-  var n_tree = clusterfck.hcluster(n_data, clusterfck.EUCLIDEAN_DISTANCE, clusterfck.COMPLETE_LINKAGE);
+// cluster samples
+  var n_tree = clusterfck.hcluster(n_data, distanceRow, linkRow);
   postOrder(n_data,n_tree[0]);
   orderedYlabel=reorderLabels(outputYlabel,tmpLabel);
 }
 
 
 function addCELHeatmap() {
-  callHclust();
+  // distanceColumn, distanceRow,linkColumn,linkRow
+  callHclust(clusterfck.EUCLIDEAN_DISTANCE, clusterfck.EUCLIDEAN_DISTANCE,
+                     clusterfck.COMPLETE_LINKAGE, clusterfck.COMPLETE_LINKAGE);
 
   var _zval= orderedLeaf;
   var _xlabel= orderedXlabel;
@@ -233,9 +239,59 @@ function addCELHeatmap() {
   var _colors=celColor;
 
   var _data=getHeatmapAt(_zval, _xlabel, _ylabel, _colors);
-  var _layout=getHeatmapDefaultLayout(1000,400);
-  addHeatmapPlot(_data,_layout);
+  var _layout=getHeatmapDefaultLayout(1000,500);
+  var _aPlot=addHeatmapPlot(_data,_layout);
+  return _aPlot;
 }
+
+
+// there must be a heatmapplot
+function toggleContour() { 
+  var _p=saveAHeatmapPlot;
+  if(_p) {
+    var _c = document.getElementById('contourBtn');
+    withContour = !withContour;
+    if(withContour) {
+      addStyleChangesHeatmap(_p, "contour", null);
+      _c.style.color='red';
+      _c.value='no Contour';
+      } else {
+      addStyleChangesHeatmap(_p, "heatmap", null);
+      _c.style.color='black';
+      _c.value='to Contour';
+    }
+  }
+}
+
+function foo(newDistance) { // this is to change the gene(column distance only)
+// newDistance, 'Eucliidean', 'Manhattan', or 'Max'
+   if(newDistance == 'Euclidean') {
+window.console.log("call foo Euclidean");
+     return;
+   }
+   if(newDistance == 'Manhattan') {
+window.console.log("call foo Manhattan");
+     return;
+   }
+   if(newDistance == 'Max') {
+window.console.log("call foo Max");
+     return;
+   }
+
+}
+
+function addStyleChangesHeatmap(aPlot, contour, target) 
+{
+  var _update = { type: contour };
+  restyleHeatmapPlot(aPlot,_update, target);
+}
+
+
+function setupHeatmapControl() {
+  var _c = document.getElementById('heatmapControlBlock');
+  _c.style.display = '';
+}
+
 
 /*********************************************/
 
@@ -320,7 +376,7 @@ function addCELLineChart(byGenes) {
   var _colors=saveColor;
 
   var _data=getLinesAt(_x, _y,_keys,_colors);
-  var _layout=getLinesDefaultLayout(1000, 400);
+  var _layout=getLinesDefaultLayout(1000, 300);
   addLinePlot(_data,_layout);
 }
 
@@ -366,7 +422,7 @@ function addCELAllHistogram() {
   var _max=Math.max.apply(Math,_x)+1;
   var _min=Math.min.apply(Math,_x)-1;
 
-  var _data=getHistogramsAt( [_pos, _neg], grColor);
+  var _data=getHistogramsAt( [_pos, _neg], grColor,[_min,_max]);
   var _layout=getHistogramsDefaultLayout(1000,300, _xtitle, _ytitle, [_min,_max]);
   addHistogramPlot(_data,_layout);
 }

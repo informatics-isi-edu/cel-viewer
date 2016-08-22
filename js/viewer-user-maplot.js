@@ -125,14 +125,15 @@ function addCELMAplot() {
   _xmax=_xmax + _delta;
 
   var _data=getLinesAt(_x, _y, _colors);
-  var _layout=getLinesDefaultLayout(1000, 500);
+  var _layout=getLinesDefaultLayout(1000, 400);
   var _aPlot=addLinePlot(_data,_layout);
-  addRestyleChanges(_aPlot,_text, [1,2]);
-  addLayoutChanges(_aPlot,_title, _xmin, _xmax, _xlabel, [_xmin,_xmax],
+  addRestyleChangesLinePlot(_aPlot,_text, [1,2]);
+  addLayoutChangesLinePlot(_aPlot,_title, _xmin, _xmax, _xlabel, [_xmin,_xmax],
                       2, -2, _ylabel, [_ymin,_ymax]);
+  return _aPlot;
 }
 
-function addRestyleChanges(_aPlot,_text, target) {
+function addRestyleChangesLinePlot(_aPlot,_text, target) {
   var _update = {
     text:_text,
     textfont : { family:'Times New Roman' },
@@ -142,7 +143,7 @@ function addRestyleChanges(_aPlot,_text, target) {
   restyleLinePlot(_aPlot,_update,target);
 }
 
-function addLayoutChanges(_aPlot,_title,_x0,_x1,xtitle,xrange,_y0,_y1,ytitle,yrange) {
+function addLayoutChangesLinePlot(_aPlot,_title,_x0,_x1,xtitle,xrange,_y0,_y1,ytitle,yrange) {
   var _update = {
      title: _title,
      xaxis: { title: xtitle, range:xrange},

@@ -100,6 +100,7 @@ window.console.log("full is..",full);
 window.console.log(url);
              url=full+url;
 window.console.log("finally,",url);
+             break;
              }
           default:
              {

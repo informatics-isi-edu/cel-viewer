@@ -1,10 +1,10 @@
 div.control-block{
   margin-left:20px;
   width:600px;
-  height:150px;
+  height:100px;
 }
 div.viewer-block{
-  width: 700px;
+  width: 1000px;
 }
 
 .ui-slider span.ui-slider-handle{

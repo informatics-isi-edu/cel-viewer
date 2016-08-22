@@ -4,7 +4,9 @@
 
 
 function addHistogramPlot(_data,_layout) {
-  var aPlot=addAPlot('#myViewer',_data, _layout, {displaylogo: false});
+  var _w=_layout.width;
+  var _h=_layout.height;
+  var aPlot=addAPlot('#myViewer',_data, _layout,_w,_h, {displayModeBar: false});
   return aPlot;
 }
 
@@ -28,6 +30,7 @@ function getHistogramDefaultLayout(w,h,xtitle,ytitle,range){
         "width": w,
         "height": h,
         "bargap": 0.2,
+        "bargroupgap": 0.2, 
         "xaxis": tmp,
         "yaxis": { "title": ytitle },
         };
@@ -36,15 +39,22 @@ function getHistogramDefaultLayout(w,h,xtitle,ytitle,range){
 
 // x is an array of x-sets,
 // color is an array of color-set
-function getHistogramsAt(x, color) {
+function getHistogramsAt(x, color, range) {
   var cnt=x.length;
   var tset=[];
   for(var i=0; i<cnt; i++) {
-    var trace= { "x": x[i],
-                  "marker": {
-                  "color":color[i],
-                  },
-                  "type" :"histogram" };
+    var trace= { x: x[i],
+                 marker: {
+                   color:color[i],
+                 },
+                 type :"histogram",
+                 autobinx: false,
+                 xbins: { 
+                   end: range[1], 
+                   size: 0.10, 
+                   start: range[0] 
+                }
+ };
 
     tset.push(trace);
   }
@@ -61,7 +71,8 @@ function getHistogramsDefaultLayout(w,h,xtitle,ytitle,range){
   var p= {
         width: w,
         height: h,
-        bargap: 0.2,
+        bargap: 0.05,
+        bargroupgap: 0.2, 
         showlegend: false,
         barmode: "overlay",
         xaxis: tmp,

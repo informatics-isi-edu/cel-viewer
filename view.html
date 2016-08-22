@@ -42,4 +42,15 @@
    <div id='myViewer'></div>
 </div>
 </body>
+<div id='heatmapControlBlock' class="control-block" style="display:none;">
+   <div>
+    <input type="radio" id="geneClusterEuclidean" value="clusterEuclidean" onClick=foo('Euclidean')>Euclidean distance</input>
+    <input type="radio" id="geneCllusterManhattan" value="clusterManhattan" onClick=foo('Manhattan')>Manhattan distance</input>
+    <input type="radio" id="geneClusterMax" value="clusterMax" onClick=foo('Max')>Max distance</input>
+   </div>
+   <div>
+    <input id="contourBtn" type="button" value="to Contour" style="background-color:#aaa" onclick="toggleContour()"/>
+   </div>
+</div>
+</body>
 </html>

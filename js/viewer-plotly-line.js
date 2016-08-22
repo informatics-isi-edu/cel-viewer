@@ -4,7 +4,9 @@
 // multiple lines, x,y,trace are all array of individual parts
 
 function addLinePlot(_data,_layout) {
-   var aLinePlot=addAPlot('#myViewer',_data, _layout, {displaylogo: false});
+   var _w=_layout.width;
+   var _h=_layout.height;
+   var aLinePlot=addAPlot('#myViewer',_data, _layout, _w,_h, {displaylogo: false});
    return aLinePlot;
 }
 

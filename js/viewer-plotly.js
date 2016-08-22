@@ -140,7 +140,7 @@ function loadPlotlyDataFromFile(fname) {
   return [d, p];
 }
 
-function addAPlot(divname, data, layout, w, h) {
+function addAPlot(divname, data, layout, w, h, extra) {
   var d3 = Plotly.d3;
   var gd3 = d3.select(divname)
     .append('div')
@@ -151,7 +151,7 @@ function addAPlot(divname, data, layout, w, h) {
     });
 
   var gd = gd3.node();
-  Plotly.newPlot(gd, data, layout);
+  Plotly.newPlot(gd, data, layout, extra);
   return gd;
 // Plotly.newPlot(divname, data, layout);
 }

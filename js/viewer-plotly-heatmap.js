@@ -5,9 +5,21 @@
 //
 
 function addHeatmapPlot(_data,_layout) {
-   var aPlot=addAPlot('#myViewer',_data, _layout, {displaylogo: false});
+   var _w=_layout.width;
+   var _h=_layout.height;
+   var aPlot=addAPlot('#myViewer',_data, _layout,_w,_h, {displaylogo: false});
    return aPlot;
 }
+
+function relayoutHeatmapPlot(aHeatmapPlot,update) {
+  relayoutAPlot(aHeatmapPlot,update);
+}
+
+function restyleHeatmapPlot(aHeatmapPlot, update, target) {
+  restyleAPlot(aHeatmapPlot,update,target);
+}
+
+
 
 function getHeatmapAt(zval,xlabel,ylabel,cval) {
   var maxList=[];
@@ -34,7 +46,12 @@ function getHeatmapAt(zval,xlabel,ylabel,cval) {
 function getHeatmapDefaultLayout(w,h){
   var p= {
         width: w,
-        height: h 
+        height: h,
+        margin:{
+          b:150,
+       }
+//        xaxis: { tickangle: 30 }
+
         };
   return p;
 }
