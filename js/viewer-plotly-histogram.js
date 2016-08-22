@@ -2,13 +2,21 @@
 //  viewer-plotly-histogram.js
 //
 
-
 function addHistogramPlot(_data,_layout) {
   var _w=_layout.width;
   var _h=_layout.height;
   var aPlot=addAPlot('#myViewer',_data, _layout,_w,_h, {displayModeBar: false});
   return aPlot;
 }
+
+function relayoutHistogramPlot(aHistogramPlot,update) {
+  relayoutAPlot(aHistogramPlot,update);
+}
+
+function restyleHistogramPlot(aHistogramPlot, update, target) {
+  restyleAPlot(aHistogramPlot,update,target);
+}
+
 
 function getHistogramAt(x, color) {
   var data= [ { "x": x,
@@ -29,8 +37,7 @@ function getHistogramDefaultLayout(w,h,xtitle,ytitle,range){
   var p= {
         "width": w,
         "height": h,
-        "bargap": 0.2,
-        "bargroupgap": 0.2, 
+        "bargap": 0.1,
         "xaxis": tmp,
         "yaxis": { "title": ytitle },
         };

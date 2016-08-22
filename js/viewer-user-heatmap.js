@@ -25,6 +25,13 @@ var celColor= [ [0, 'rgb(255,0,0)'],
                  [0.7, 'rgb(0,100,0)'],
                  [1, 'rgb(0,255,0)'] ];
 
+var celColor2= [ [0, 'rgb(0,0,255)'],
+                 [0.3, 'rgb(0,0,100)'],
+                 [0.5, 'rgb(0,0,0)'],
+                 [0.7, 'rgb(0,100,0)'],
+                 [1, 'rgb(0,255,0)'] ];
+
+
 var grColor= [ 'rgb(0,139,0)', 'rgb(139,0,0)'];
 var rgColor= [ 'rgb(139,0,0)', 'rgb(0,139,0)' ];
 
@@ -244,6 +251,24 @@ function addCELHeatmap() {
   return _aPlot;
 }
 
+function updateCELHeatmapClustering(distanceColumn, distanceRow, 
+linkColumn, linkRow){
+
+  callHclust(distanceColumn, distanceRow, linkColumn, linkRow);
+
+  var _zval= orderedLeaf;
+  var _xlabel= orderedXlabel;
+  var _ylabel= orderedYlabel;
+  var _colors=celColor;
+
+  var _data=getHeatmapAt(_zval, _xlabel, _ylabel, _colors);
+  var _layout=getHeatmapDefaultLayout(1000,500);
+
+  removeHeatmapPlot();
+  addCELAllHistogram();
+  var _aPlot=addHeatmapPlot(_data,_layout);
+  return _aPlot;
+}
 
 // there must be a heatmapplot
 function toggleContour() { 
@@ -252,11 +277,11 @@ function toggleContour() {
     var _c = document.getElementById('contourBtn');
     withContour = !withContour;
     if(withContour) {
-      addStyleChangesHeatmap(_p, "contour", null);
+      addStyleChangesHeatmapType(_p, "contour", null);
       _c.style.color='red';
       _c.value='no Contour';
       } else {
-      addStyleChangesHeatmap(_p, "heatmap", null);
+      addStyleChangesHeatmapType(_p, "heatmap", null);
       _c.style.color='black';
       _c.value='Contour';
     }
@@ -265,24 +290,28 @@ function toggleContour() {
 
 function updateGeneCluster(newDistance) { // this is to change the gene(column distance only)
 // newDistance, 'Eucliidean', 'Manhattan', or 'Max'
-   if(newDistance == 'Euclidean') {
+  if(newDistance == 'Euclidean') {
 window.console.log("call foo Euclidean");
-     return;
-   }
-   if(newDistance == 'Manhattan') {
+    saveAHeatmapPlot=updateCELHeatmapClustering(clusterfck.EUCLIDEAN_DISTANCE, clusterfck.EUCLIDEAN_DISTANCE, clusterfck.COMPLETE_LINKAGE, clusterfck.COMPLETE_LINKAGE);
+    return;
+  }
+  if(newDistance == 'Manhattan') {
 window.console.log("call foo Manhattan");
-     return;
-   }
-   if(newDistance == 'Max') {
+    saveAHeatmapPlot=updateCELHeatmapClustering(clusterfck.MANHATTAN_DISTANCE, clusterfck.EUCLIDEAN_DISTANCE, clusterfck.COMPLETE_LINKAGE, clusterfck.COMPLETE_LINKAGE);
+    return;
+  }
+  if(newDistance == 'Max') {
 window.console.log("call foo Max");
-     return;
-   }
+    saveAHeatmapPlot=updateCELHeatmapClustering(clusterfck.MAX_DISTANCE, clusterfck.EUCLIDEAN_DISTANCE, clusterfck.COMPLETE_LINKAGE, clusterfck.COMPLETE_LINKAGE);
+    return;
+  }
 
 }
 
-function addStyleChangesHeatmap(aPlot, contour, target) 
+// "contour" or "heatmap"
+function addStyleChangesHeatmapType(aPlot, newtype, target) 
 {
-  var _update = { type: contour };
+  var _update = { type: newtype };
   restyleHeatmapPlot(aPlot,_update, target);
 }
 
@@ -290,6 +319,14 @@ function addStyleChangesHeatmap(aPlot, contour, target)
 function setupHeatmapControl() {
   var _c = document.getElementById('heatmapControlBlock');
   _c.style.display = '';
+  var _radios =document.getElementById('geneClustering');
+  for (var i = 0; i < _radios.length; i++) {
+    if (_radios[i].value === 'Euclidean') {
+       _radios[i].checked='checked';
+       } else {
+         _radios[i].checked='';
+    }
+  }
 }
 
 
@@ -424,6 +461,10 @@ function addCELAllHistogram() {
 
   var _data=getHistogramsAt( [_pos, _neg], grColor,[_min,_max]);
   var _layout=getHistogramsDefaultLayout(1000,300, _xtitle, _ytitle, [_min,_max]);
+  // make layout's trace name to be disabled
+  _data[0].name="";
+  _data[1].name="";
+  _layout.hovermode="closest";
   addHistogramPlot(_data,_layout);
 }
 

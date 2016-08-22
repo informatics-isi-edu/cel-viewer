@@ -125,7 +125,11 @@ function addCELMAplot() {
   _xmax=_xmax + _delta;
 
   var _data=getLinesAt(_x, _y, _colors);
+  for(var i=0; i<_x.length;i++) {
+    _data[i].name="";
+  }
   var _layout=getLinesDefaultLayout(1000, 400);
+  _layout.hovermode="closest";
   var _aPlot=addLinePlot(_data,_layout);
   addRestyleChangesLinePlot(_aPlot,_text, [1,2]);
   addLayoutChangesLinePlot(_aPlot,_title, _xmin, _xmax, _xlabel, [_xmin,_xmax],
@@ -138,7 +142,7 @@ function addRestyleChangesLinePlot(_aPlot,_text, target) {
     text:_text,
     textfont : { family:'Times New Roman' },
     textposition: ['top center','bottom center'],
-    mode: [ 'markers+text', 'markers+text' ]
+    mode: [ 'markers+text', 'markers+text' ],
   }
   restyleLinePlot(_aPlot,_update,target);
 }

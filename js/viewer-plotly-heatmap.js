@@ -11,6 +11,10 @@ function addHeatmapPlot(_data,_layout) {
    return aPlot;
 }
 
+function removeHeatmapPlot() {
+   $('#myViewer').empty();
+}
+
 function relayoutHeatmapPlot(aHeatmapPlot,update) {
   relayoutAPlot(aHeatmapPlot,update);
 }
