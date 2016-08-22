@@ -258,12 +258,12 @@ function toggleContour() {
       } else {
       addStyleChangesHeatmap(_p, "heatmap", null);
       _c.style.color='black';
-      _c.value='to Contour';
+      _c.value='Contour';
     }
   }
 }
 
-function foo(newDistance) { // this is to change the gene(column distance only)
+function updateGeneCluster(newDistance) { // this is to change the gene(column distance only)
 // newDistance, 'Eucliidean', 'Manhattan', or 'Max'
    if(newDistance == 'Euclidean') {
 window.console.log("call foo Euclidean");

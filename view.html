@@ -42,14 +42,19 @@
    <div id='myViewer'></div>
 </div>
 </body>
-<div id='heatmapControlBlock' class="control-block" style="display:none;">
-   <div>
-    <input type="radio" id="geneClusterEuclidean" value="clusterEuclidean" onClick=foo('Euclidean')>Euclidean distance</input>
-    <input type="radio" id="geneCllusterManhattan" value="clusterManhattan" onClick=foo('Manhattan')>Manhattan distance</input>
-    <input type="radio" id="geneClusterMax" value="clusterMax" onClick=foo('Max')>Max distance</input>
+<div id='heatmapControlBlock' class="control-block" style="display:none;margin:10px;">
+   <div id='geneClusterDiv' style="margin:10px">
+     <form>
+	<label for="geneClusterEuclidean" style="margin:5px">
+	<input type="radio" name="geneCluster" checked="checked" value="Euclidean" style="margin:5px" onClick="updateGeneCluster('Euclidean')">Euclidean distance</label>
+	<label for="geneClusterManhattan" style="margin:5px">
+	<input type="radio" name="geneCluster" value="Manhattan" style="margin:5px" onClick="updateGeneCluster('Manhattan')">Manhattan distance</label>
+	<label for="geneClusterMax" style="margin:5px">
+	<input type="radio" name="geneCluster" value="Max" style="margin:5px" onClick="updateGeneCluster('Max')">Max distance</label>
+     </form>
    </div>
    <div>
-    <input id="contourBtn" type="button" value="to Contour" style="background-color:#aaa" onclick="toggleContour()"/>
+    <input id="contourBtn" type="button" value="Contour" style="background-color:#aaa;margin-left:20px" onclick="toggleContour()"/>
    </div>
 </div>
 </body>
