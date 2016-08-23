@@ -235,7 +235,10 @@ function callHclust(distanceColumn,distanceRow,linkColumn,linkRow) {
 }
 
 
+// default case
 function addCELHeatmap() {
+  addCELAllHistogram();
+
   // distanceColumn, distanceRow,linkColumn,linkRow
   callHclust(clusterfck.EUCLIDEAN_DISTANCE, clusterfck.EUCLIDEAN_DISTANCE,
                      clusterfck.COMPLETE_LINKAGE, clusterfck.COMPLETE_LINKAGE);
@@ -253,6 +256,8 @@ function addCELHeatmap() {
 
 function updateCELHeatmapClustering(distanceColumn, distanceRow, 
 linkColumn, linkRow){
+  removeHeatmapPlot();
+  addCELAllHistogram();
 
   callHclust(distanceColumn, distanceRow, linkColumn, linkRow);
 
@@ -263,9 +268,6 @@ linkColumn, linkRow){
 
   var _data=getHeatmapAt(_zval, _xlabel, _ylabel, _colors);
   var _layout=getHeatmapDefaultLayout(1000,500);
-
-  removeHeatmapPlot();
-  addCELAllHistogram();
   var _aPlot=addHeatmapPlot(_data,_layout);
   return _aPlot;
 }

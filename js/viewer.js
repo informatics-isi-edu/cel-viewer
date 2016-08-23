@@ -19,7 +19,6 @@ jQuery(document).ready(function() {
 window.console.log("processing --",blob.meta.type);
       if(blob.meta.type == "heatmap") {
         convertCELBlobData(blob);
-        addCELAllHistogram();
         saveAHeatmapPlot=addCELHeatmap();
         setupHeatmapControl();
         } else {
