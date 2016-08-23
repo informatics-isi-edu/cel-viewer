@@ -38,27 +38,28 @@
 
 </head>
 <body>
-<div class="container">
-<div id='viewerBlock' class="viewer-block">
+<div class="container" style="width:100%">
+<div id='viewerBlock' class="viewer-block" style="margin:0 auto;">
    <div id='myViewer'></div>
 </div>
-<div id='heatmapControlBlock' class="control-block" style="display:none;margin:10px;">
-   <div style="margin:10px">
-     <div id="geneClustering" class="btn-group" data-toggle="buttons">
-       <p> Cluster genes using, </p> 
-       <label class="btn btn-default active">
-         <input type="radio" id="Euclidean" name="clustering" autocomplete="off" checked>Euclidean distance</label>
-       <label class="btn btn-default">
-         <input type="radio" id="Manhattan" name="clustering" autocomplete="off" >Manhattan distance</label>
-       <label class="btn btn-default">
-         <input type="radio" id="Max" name="clustering" autocomplete="off" >Max distance</label>
-       <label class="btn btn-default">
-         <input type="radio" id="Correlation" name="clustering" autocomplete="off" >Correlation distance</label>
-     </div>
-     </div>
+<div id='heatmapControlBlock' class="control-block" style="display:none; margin:0 auto;">
+   <div id="geneClustering" class="btn-group" data-toggle="buttons" style="margin:10px">
+     <p> Cluster genes using, </p> 
+     <label class="btn btn-default active">
+       <input type="radio" id="Euclidean" name="clustering" autocomplete="off" checked>Euclidean distance</label>
+     <label class="btn btn-default">
+       <input type="radio" id="Manhattan" name="clustering" autocomplete="off" >Manhattan distance</label>
+     <label class="btn btn-default">
+       <input type="radio" id="Max" name="clustering" autocomplete="off" >Max distance</label>
+     <label class="btn btn-default">
+       <input type="radio" id="Correlation" name="clustering" autocomplete="off" >Correlation distance</label>
    </div>
-   <div>
-   <button id="contourBtn" class="btn btn-default" style="background-color:#aaa;margin-left:20px" onclick="toggleContour()">Contour</button>
+   <div id="heatmapStyling" class="btn-group" data-toggle="buttons" style="margin:10px">
+     <p> Heatpmap style using, </p> 
+     <label class="btn btn-default active">
+       <input type="radio" id="Heatmap" name="styling" autocomplete="off" checked>Heatmap</label>
+     <label class="btn btn-default">
+       <input type="radio" id="Contour" name="styling" autocomplete="off">Contour</label>
    </div>
 </div>
 </div>

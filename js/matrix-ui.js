@@ -82,10 +82,10 @@ function _makeEmptyCell(cLabel,rLabel) {
   return _c;
 }
 
-function _makeRow(rLabel) {
+function _makeRow(rLabel,i) {
   var _name=_makeRowId(rLabel);
   var _labels=selectLabel;
-  var _rlist='<th class="row-header head-div" id="'+_name+'" title="'+rLabel+'" >'+rLabel+'</div></th>';
+  var _rlist='<th style="width:10%" class="row-header head-div" id="'+_name+'" title="'+rLabel+'" >'+rLabel+'</th>';
   for(var i=0;i<_labels.length;i++) {
     var _c=_makeEmptyCell(_labels[i], rLabel);
     _rlist += _c;
@@ -97,7 +97,7 @@ function setupMatrixTableBody() {
   var _labels=selectLabel;
   var _rlist="";
   for(var i=0; i<_labels.length;i++) {
-   var _r=_makeRow(_labels[i]);
+   var _r=_makeRow(_labels[i],i);
    _rlist += _r;
   }
   return _rlist;

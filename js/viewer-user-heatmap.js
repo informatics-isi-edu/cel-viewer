@@ -294,17 +294,23 @@ linkColumn, linkRow){
 }
 
 // there must be a heatmapplot
-function toggleContour() { 
+function toggleContour(stype) { 
   var _p=saveAHeatmapPlot;
   if(_p) {
-    var _c = document.getElementById('contourBtn');
-    withContour = !withContour;
-    if(withContour) {
-      addStyleChangesHeatmapType(_p, "contour", null);
-      _c.style.color='red';
-      } else {
-      addStyleChangesHeatmapType(_p, "heatmap", null);
-      _c.style.color='black';
+    if(stype == 'Contour') {  // to Contour
+      if(withContour) {  // do nothing
+        return;
+        } else {
+          withContour = !withContour;
+          addStyleChangesHeatmapType(_p, "contour", null);
+      }
+      } else {  // to Heatmap
+        if(!withContour) {  // do nothing
+          return;
+          } else {
+            withContour = !withContour;
+            addStyleChangesHeatmapType(_p, "heatmap", null);
+        }
     }
   }
 }
@@ -324,12 +330,8 @@ function updateGeneCluster(newDistance) { // this is to change the gene(column d
     saveAHeatmapPlot=null;
     return;
   }
-
-  var _c = document.getElementById('contourBtn');
-  _c.style.color='black';
   if(withContour) {
     addStyleChangesHeatmapType(saveAHeatmapPlot, "contour", null);
-    _c.style.color='red';
   }
 }
 
@@ -347,6 +349,10 @@ function setupHeatmapControl() {
   $("#geneClustering :input").change(function() {
 //    window.console.log(this); // points to the clicked input button
     updateGeneCluster(this.id);
+  });
+  $("#heatmapStyling :input").change(function() {
+//    window.console.log(this); // points to the clicked input button
+     toggleContour(this.id); 
   });
 }
 
