@@ -10,6 +10,7 @@ var inputSamples=[];
 var inputGenes=null;
 
 var yyLabel=null;
+var title=null;
 
 var outputXlabel=null;
 var outputYlabel=null;
@@ -90,7 +91,12 @@ function loadHeatmapCSVFromFile(url) {
 // blob is in json blob
 function convertCELBlobData(blob) {
   initData();
-  yyLabel=blob.meta.yylabel;
+  var _meta=blob.meta;
+  var _config=_meta.config;
+  
+  yyLabel=config2foldType(_config);
+  title=config2mainTitle(_config);
+
   var heatmap=blob.data;
   inputGenes=heatmap.symbol;
 
@@ -491,7 +497,9 @@ function addCELAllHistogram() {
   // make layout's trace name to be disabled
   _data[0].name="";
   _data[1].name="";
+ 
   _layout.hovermode="closest";
+  _layout.title=title;
   addHistogramPlot(_data,_layout);
 }
 

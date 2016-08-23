@@ -63,9 +63,13 @@ inputYlabel=null;
 // blob is in json blob
 function convertMAplotBlobData(blob) {
   initData();
-  inputXlabel=blob.meta.xlabel;
-  inputYlabel=blob.meta.ylabel;
-  inputTitle=blob.meta.title;
+  var _meta=blob.meta;
+  var _config=_meta.config;
+
+  inputTitle=config2mainTitle(_config);
+  inputXlabel=config2exprLabel(_config);
+  inputYlabel=config2foldLabel(_config);
+
   var blackPts=blob.data.blackPts;
   inputGenes=blackPts.symbol;
   var t=blackPts.x

@@ -84,9 +84,7 @@ one <- ifelse(invert, "mandible", "maxilla")
 two <- ifelse(invert, "maxilla", "mandible")}
 
 ## if the comparison is "age" (e.g. E10.5 vs. E11.5, or E12.5 vs. E14.5):
-
 ages <- unique(substr(sels, 1, 4))
-
 if (length(ages)) age.1 <- min(ages) else age.1 <- 10.5
 young.col <- paste0("age", age.1)
 if (inputCONFIG$comp == "age"){
@@ -270,12 +268,6 @@ dat.top <- dat.sel[rownames(dat.sel) %in% top$Probeset, ]
     par(mar = c(5, 5, 5, 8))
     lim <- max(abs(range(dat.sel$M)))
     
-XLAB <- "Average Expression"
-YLAB <- paste0(one,
-    paste(rep(" ", ifelse(inputCONFIG$log, 15, 20)), collapse = ""),
-    ifelse(inputCONFIG$log, "Log2 Fold Change", "Fold Change"),
-    paste(rep(" ", ifelse(inputCONFIG$log, 15, 20)), collapse = ""), two)
-
     plot(NULL, cex = 0.9,
         xaxt = "n", yaxt = "n",
         xlab = "Average Expression",
@@ -292,9 +284,8 @@ YLAB <- paste0(one,
         main = paste(unique(gsub("1$|2$|3$", "", c(ones, twos))), collapse = " ")
     )
 
-MAINLAB <- paste(unique(gsub("1$|2$|3$", "", c(ones, twos))), collapse = " ")
-
-metaList <- list(type='maplot', title=MAINLAB, xlabel=XLAB, ylabel=YLAB, config=inputCONFIG)
+MAINLABEL <- paste(unique(gsub("1$|2$|3$", "", c(ones, twos))), collapse = " ")
+metaList <- list(type='maplot', config=inputCONFIG)
 blackX <- dat.sel$A[dat.sel$color == "black"]
 blackY <- dat.sel$M[dat.sel$color == "black"]
 blackSymbol <- dat.sel$symbol[dat.sel$color == "black"]
@@ -333,7 +324,7 @@ if(!is.null(topX) && length(topX)!=0) {
   dataList$topPts <- topPtsList
 }
 jsonList <- list(meta=metaList, data=dataList)
-dir <- gsub(" ", "_", MAINLAB)
+dir <- gsub(" ", "_", MAINLABEL)
 dir.create(dir)
 maplotfn <- paste0(dir, "/", "MAplotData.json")
 write(toJSON(jsonList), maplotfn, append=FALSE)
@@ -388,24 +379,10 @@ if (inputCONFIG$log) {
 
 extreme <- ceiling(10 * extreme) / 10
 
-## ==> pure dump of the dat.heat
 SYMBOL <- dat.top$symbol
-dat.tmp <- as.data.frame(dat.heat)
-#write.csv(dat.tmp,"newDatTmp.csv")
-
-## ==> transpose the data and then 
-##   replaced the literal gene into column name
-##   can not replace row name because duplicates is not allowed
-df.heat <- as.data.frame(t(dat.tmp))
-colnames(df.heat) <- SYMBOL
-#write.csv(df.heat,"newDfHeat.csv")
-
-## ==> transposed of the DfHeat back to the shape of dat.heat
-#write.csv(t(df.heat),"HeatmapData.csv")
-
-YYLAB <- ifelse(inputCONFIG$log, "Log2 Fold Change", "Fold Change")
-metaList <- list(type='heatmap', title=MAINLAB, yylabel=YYLAB, config=inputCONFIG)
 PROBESET <- rownames(dat.heat) 
+
+metaList <- list(type='heatmap', config=inputCONFIG)
 heatmapList <- list(symbol=SYMBOL, probeset=PROBESET) 
 
 sampleList.names <- colnames(dat.heat)
@@ -423,31 +400,6 @@ heatmapList$samples <- sampleList
 jsonList=list(meta=metaList, data=heatmapList)
 heatmapfn <- paste0(dir, "/", "HeatmapData.json")
 write(toJSON(jsonList),heatmapfn, append=FALSE) 
-
-### trying hclust
-#print("  -- START CLUSTERING --")
-#print("  cluster first...")
-#print(nrow(df.heat))
-#hr <- hclust(dist(df.heat))
-#print(hr$order)
-#df.heat=df.heat[hr$order,,drop=FALSE]
-#colv <- as.dendrogram(hr)
-#print(colv$labels)
-#plot(colv)
-## the other side
-#df2.heat=t(df.heat)
-#hr2 <- hclust(dist(df2.heat))
-#print("  cluster second...")
-#print(nrow(df2.heat))
-#print(hr2$order)
-#df2.heat=df2.heat[hr2$order,,drop=FALSE]
-#write.csv(t(df2.heat),"Df2Heat.csv")
-#plot(hr2)
-#rowv <- as.dendrogram(hr)
-#print(rowv)
-#plot(rowv)
-#heatplot(t(dat.heat))
-
 
 heatmap.2(t(dat.heat),
           Rowv = as.integer(weights),
