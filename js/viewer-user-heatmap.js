@@ -290,12 +290,6 @@ linkColumn, linkRow){
   var _data=getHeatmapAt(_zval, _xlabel, _ylabel, _colors);
   var _layout=getHeatmapDefaultLayout(1000,500);
   var _aPlot=addHeatmapPlot(_data,_layout); // heatmap by default
-  var _c = document.getElementById('contourBtn');
-  _c.style.color='black';
-  if(withContour) {
-    addStyleChangesHeatmapType(_p, "contour", null);
-    _c.style.color='red';
-  }
   return _aPlot;
 }
 
@@ -317,23 +311,26 @@ function toggleContour() {
 
 function updateGeneCluster(newDistance) { // this is to change the gene(column distance only)
 // newDistance, 'Eucliidean', 'Manhattan', or 'Max'
+
   if(newDistance == 'Euclidean') {
     saveAHeatmapPlot=updateCELHeatmapClustering(clusterfck.EUCLIDEAN_DISTANCE, clusterfck.EUCLIDEAN_DISTANCE, clusterfck.COMPLETE_LINKAGE, clusterfck.COMPLETE_LINKAGE);
-    return;
-  }
-  if(newDistance == 'Manhattan') {
+  } else if(newDistance == 'Manhattan') {
     saveAHeatmapPlot=updateCELHeatmapClustering(clusterfck.MANHATTAN_DISTANCE, clusterfck.EUCLIDEAN_DISTANCE, clusterfck.COMPLETE_LINKAGE, clusterfck.COMPLETE_LINKAGE);
-    return;
-  }
-  if(newDistance == 'Max') {
+  }else if(newDistance == 'Max') {
     saveAHeatmapPlot=updateCELHeatmapClustering(clusterfck.MAX_DISTANCE, clusterfck.EUCLIDEAN_DISTANCE, clusterfck.COMPLETE_LINKAGE, clusterfck.COMPLETE_LINKAGE);
-    return;
-  }
-  if(newDistance == 'Correlation') {
+  } else if(newDistance == 'Correlation') {
     saveAHeatmapPlot=updateCELHeatmapClustering(null,null,null,null);
+  } else {
+    saveAHeatmapPlot=null;
     return;
   }
 
+  var _c = document.getElementById('contourBtn');
+  _c.style.color='black';
+  if(withContour) {
+    addStyleChangesHeatmapType(saveAHeatmapPlot, "contour", null);
+    _c.style.color='red';
+  }
 }
 
 // "contour" or "heatmap"
