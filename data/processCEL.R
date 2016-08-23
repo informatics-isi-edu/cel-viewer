@@ -294,7 +294,7 @@ YLAB <- paste0(one,
 
 MAINLAB <- paste(unique(gsub("1$|2$|3$", "", c(ones, twos))), collapse = " ")
 
-metaList <- list(type='maplot', title=MAINLAB, xlabel=XLAB, ylabel=YLAB)
+metaList <- list(type='maplot', title=MAINLAB, xlabel=XLAB, ylabel=YLAB, config=inputCONFIG)
 blackX <- dat.sel$A[dat.sel$color == "black"]
 blackY <- dat.sel$M[dat.sel$color == "black"]
 blackSymbol <- dat.sel$symbol[dat.sel$color == "black"]
@@ -403,7 +403,8 @@ colnames(df.heat) <- SYMBOL
 ## ==> transposed of the DfHeat back to the shape of dat.heat
 #write.csv(t(df.heat),"HeatmapData.csv")
 
-metaList <- list(type='heatmap', title=MAINLAB)
+YYLAB <- ifelse(inputCONFIG$log, "Log2 Fold Change", "Fold Change")
+metaList <- list(type='heatmap', title=MAINLAB, yylabel=YYLAB, config=inputCONFIG)
 PROBESET <- rownames(dat.heat) 
 heatmapList <- list(symbol=SYMBOL, probeset=PROBESET) 
 

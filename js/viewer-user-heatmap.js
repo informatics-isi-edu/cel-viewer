@@ -9,6 +9,8 @@ var inputData=[]; // this is in Matrix format [[..][..][..]]
 var inputSamples=[];
 var inputGenes=null;
 
+var yyLabel=null;
+
 var outputXlabel=null;
 var outputYlabel=null;
 var genesAt=null;
@@ -41,6 +43,8 @@ var withContour=false;
 //{
 // "meta": {
 // "type": "heatmap" 
+// "yylabel" : "log2" // for lineplot
+// "config" : { from configIt.R }
 //},
 //"data": {
 //"symbol": [...],
@@ -53,6 +57,7 @@ function initData() {
   inputGenes=null;
   inputData=[];
   inputSamples=[];
+  yyLabel=null;
   genesAt='horizontal';
   outputXlabel=null;
   outputYlabel=null;
@@ -85,6 +90,7 @@ function loadHeatmapCSVFromFile(url) {
 // blob is in json blob
 function convertCELBlobData(blob) {
   initData();
+  yyLabel=blob.meta.yylabel;
   var heatmap=blob.data;
   inputGenes=heatmap.symbol;
 
@@ -215,11 +221,17 @@ function callHclust(distanceColumn,distanceRow,linkColumn,linkRow) {
   } 
   var rowOrder, columnOrder;
 // cluster genes
-  var tree = clusterfck.hcluster(data, distanceColumn,linkColumn);
+  if(distanceColumn!=null) {
+    var tree = clusterfck.hcluster(data, distanceColumn,linkColumn);
   // tree is an array 
-  postOrder(data,tree[0]);
+    postOrder(data,tree[0]);
+    } else {
+      for(var i=0; i<data.length;i++)
+        tmpLabel.push(i);
+      orderedLeaf=data;
+  }
 
-  window.console.log("new order-->");
+  window.console.log("new X order-->");
   window.console.log(tmpLabel.toString());
 
   var n_leaf=orderedLeaf; orderedLeaf=[];
@@ -229,9 +241,18 @@ function callHclust(distanceColumn,distanceRow,linkColumn,linkRow) {
   tmpLabel=[];
   n_data=transpose(n_leaf);
 // cluster samples
-  var n_tree = clusterfck.hcluster(n_data, distanceRow, linkRow);
-  postOrder(n_data,n_tree[0]);
+  if(distanceRow!=null) {
+    var n_tree = clusterfck.hcluster(n_data, distanceRow, linkRow);
+    postOrder(n_data,n_tree[0]);
+    } else {
+window.console.log(n_data.length);
+      for(var i=0; i<n_data.length; i++) {
+        tmpLabel.push(i);
+      }
+      orderedLeaf = n_data;
+  }
   orderedYlabel=reorderLabels(outputYlabel,tmpLabel);
+  window.console.log("new Y order-->",tmpLabel.toString());
 }
 
 
@@ -300,6 +321,10 @@ function updateGeneCluster(newDistance) { // this is to change the gene(column d
   }
   if(newDistance == 'Max') {
     saveAHeatmapPlot=updateCELHeatmapClustering(clusterfck.MAX_DISTANCE, clusterfck.EUCLIDEAN_DISTANCE, clusterfck.COMPLETE_LINKAGE, clusterfck.COMPLETE_LINKAGE);
+    return;
+  }
+  if(newDistance == 'Correlation') {
+    saveAHeatmapPlot=updateCELHeatmapClustering(null,null,null,null);
     return;
   }
 
@@ -435,8 +460,8 @@ function addCELHistogram(idx) {
 function addCELAllHistogram() {
   buildDataComplete();
 
-  var _xtitle="Complete set";
-  var _ytitle="Count";
+  var _xtitle=yyLabel;
+  var _ytitle="";
   var _x=saveY;
   var _pos=[];
   var _neg=[];

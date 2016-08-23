@@ -9,7 +9,8 @@
 // "meta": {
 //      "title": "10.5MndP 10.5MndD",
 //      "xlabel": "Average Expression",
-//      "ylabel": "proximal               Log2 Fold Change               distal" 
+//      "ylabel": "proximal               Log2 Fold Change               distal", 
+//      "config": { // from configIt.R } 
 //         },
 //  "data" : {
 //      "blackPts": { "x": [ 10.317,..], "y": [ ...], "symbol":[..] },
