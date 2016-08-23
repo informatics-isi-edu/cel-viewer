@@ -289,7 +289,13 @@ linkColumn, linkRow){
 
   var _data=getHeatmapAt(_zval, _xlabel, _ylabel, _colors);
   var _layout=getHeatmapDefaultLayout(1000,500);
-  var _aPlot=addHeatmapPlot(_data,_layout);
+  var _aPlot=addHeatmapPlot(_data,_layout); // heatmap by default
+  var _c = document.getElementById('contourBtn');
+  _c.style.color='black';
+  if(withContour) {
+    addStyleChangesHeatmapType(_p, "contour", null);
+    _c.style.color='red';
+  }
   return _aPlot;
 }
 
