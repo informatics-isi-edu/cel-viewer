@@ -314,14 +314,10 @@ function addStyleChangesHeatmapType(aPlot, newtype, target)
 function setupHeatmapControl() {
   var _c = document.getElementById('heatmapControlBlock');
   _c.style.display = '';
-  var _radios =document.getElementById('geneClustering');
-  for (var i = 0; i < _radios.length; i++) {
-    if (_radios[i].value === 'Euclidean') {
-       _radios[i].checked='checked';
-       } else {
-         _radios[i].checked='';
-    }
-  }
+  $("#geneClustering :input").change(function() {
+//    window.console.log(this); // points to the clicked input button
+    updateGeneCluster(this.id);
+  });
 }
 
 

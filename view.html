@@ -44,17 +44,17 @@
 </div>
 <div id='heatmapControlBlock' class="control-block" style="display:none;margin:10px;">
    <div style="margin:10px">
-     <form id='geneClustering'>
-	<label for="geneClusterEuclidean" style="margin:5px">
-	<input type="radio" name="geneCluster" checked="checked" value="Euclidean" style="margin:5px" onClick="updateGeneCluster('Euclidean')">Euclidean distance</label>
-	<label for="geneClusterManhattan" style="margin:5px">
-	<input type="radio" name="geneCluster" value="Manhattan" style="margin:5px" onClick="updateGeneCluster('Manhattan')">Manhattan distance</label>
-	<label for="geneClusterMax" style="margin:5px">
-	<input type="radio" name="geneCluster" value="Max" style="margin:5px" onClick="updateGeneCluster('Max')">Max distance</label>
-     </form>
+     <div id="geneClustering" class="btn-group" data-toggle="buttons">
+       <label class="btn btn-default active">
+         <input type="radio" id="Euclidean" autocomplete="off" checked>Euclidean distance</label>
+       <label class="btn btn-default">
+         <input type="radio" id="Manhattan" autocomplete="off">Manhattan distance</label>
+       <label class="btn btn-default">
+         <input type="radio" id="Max" autocomplete="off">Max distance</label>
+     </div>
    </div>
    <div>
-   <button id="contourBtn" class="btn btn-default" style="background-color:#aaa;margin-left:20px" onclick="toggleContour()">Contour</button>
+   <button id="contourBtn" class="btn btn-default" style="background-color:#aaa;margin-left:10px" onclick="toggleContour()">Contour</button>
    </div>
 </div>
 </div>
