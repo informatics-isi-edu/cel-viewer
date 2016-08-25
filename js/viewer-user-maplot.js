@@ -35,6 +35,9 @@ var inputNGGenes=null;
 var inputXlabel=null;
 var inputYlabel=null;
 
+var highlightGenesToggle=false;
+var specialGenesTrace=3; // 0=blackPts, 1=posPts, 2=negPts, 3=special
+
 var grTriColor= [ getColor(0), 'rgb(0,139,0)', 'rgb(139,0,0)' ];
 var rgTriColor= [ getColor(0), 'rgb(139,0,0)', 'rgb(0,139,0)' ];
 
@@ -113,8 +116,8 @@ function addCELMAplot() {
   var _ylabel=inputYlabel;
   var _title=inputTitle;
 
-  var _inputXdata=inputXdata.slice(0,3000);
-  var _inputYdata=inputYdata.slice(0,3000);
+  var _inputXdata=inputXdata.slice(0,10);
+  var _inputYdata=inputYdata.slice(0,10);
 
   var _x=[_inputXdata, inputPXXdata, inputNXXdata];
   var _y=[_inputYdata, inputPYYdata, inputNYYdata];
@@ -138,10 +141,20 @@ function addCELMAplot() {
   }
   var _layout=getLinesDefaultLayout(1000, 400);
   _layout.hovermode="closest";
+  _layout.shapes= [{ type: 'rect',
+              xref: 'x',
+              yref: 'y',
+              x0: _xmin,
+              x1: _xmax, 
+              y0: 2,
+              y1: -2,
+              fillcolor: '#d3d3d3',
+              opacity: 0.2,
+              line: { width: 1 }
+              }];
   var _aPlot=addLinePlot(_data,_layout);
   addRestyleChangesLinePlot(_aPlot,_text, [1,2]);
-  addLayoutChangesLinePlot(_aPlot,_title, _xmin, _xmax, _xlabel, [_xmin,_xmax],
-                      2, -2, _ylabel, [_ymin,_ymax]);
+  addLayoutChangesLinePlot(_aPlot,_title, _xlabel, [_xmin,_xmax], _ylabel, [_ymin,_ymax]);
   return _aPlot;
 }
 
@@ -155,23 +168,12 @@ function addRestyleChangesLinePlot(_aPlot,_text, target) {
   restyleLinePlot(_aPlot,_update,target);
 }
 
-function addLayoutChangesLinePlot(_aPlot,_title,_x0,_x1,xtitle,xrange,_y0,_y1,ytitle,yrange) {
+function addLayoutChangesLinePlot(_aPlot,_title,xtitle,xrange,ytitle,yrange) {
   var _update = {
      title: _title,
      xaxis: { title: xtitle, range:xrange},
      yaxis: { title: ytitle, range:yrange},
-     shapes: [{ type: 'rect',
-              xref: 'x',
-              yref: 'y',
-              x0: _x0,
-              x1: _x1, 
-              y0: _y0,
-              y1: _y1,
-              fillcolor: '#d3d3d3',
-              opacity: 0.3,
-              line: { width: 1 }
-              }]
-      };
+     };
   relayoutLinePlot(_aPlot,_update);
 }
 
@@ -214,11 +216,25 @@ function checkMin(val, max, min){
   return (val-min)/(max-min) > 0.1;
 }
 
+
 function setupMAplotControl() {
   var _c = document.getElementById('maplotControlBlock');
   if(_c)
     _c.style.display = '';
 
+// highlight
+  var _s = document.getElementById('specialGenes');
+  if(_s) { // clear
+     _s.value='';
+  } 
+
+  $("#highlightGenes :input").change(function() {
+//    window.console.log(this); // points to the clicked input button
+    highlightGenes(this.id);
+  });
+
+
+// slider
   var _min=0;
   var _max=inputXdata.length;
   var _tmp=1;
@@ -227,7 +243,7 @@ function setupMAplotControl() {
   });
   var _step=_tmp/10;
   var _start=_min
-  var _end=_start+(_step*3);
+  var _end=_start+(_step);
 window.console.log(_start, " to ",_end);
   jQuery("#blackPts_slider").slider({
     min: _min,
@@ -249,11 +265,13 @@ window.console.log(_start, " to ",_end);
     }
   });
   $("#blackPts_slider" ).slider( "option", "values", [_start,_end] );
+  updateBlackPts([_start,_end]);
 }
 
 
 
 function updateBlackPts(range) {
+window.console.log("calling updateBackPts..");
   var _newXdata=inputXdata.slice(range[0], range[1]); 
   var _newYdata=inputYdata.slice(range[0], range[1]); 
   var _update = {
@@ -262,5 +280,53 @@ function updateBlackPts(range) {
   };
 window.console.log("here..",_newXdata.length);
   restyleLinePlot(saveAMAplot,_update,[0]);
+}
+
+
+// always the 4th trace
+function addSpecialGenesTrace(glist){
+   var _nXdata=[];
+   var _nYdata=[];
+   var _nGenes=[];
+   var slist=glist.split(" ");
+   window.console.log("slist is..",slist);
+   var _iG=inputGenes;
+   for(var i=0; i<_iG.length;i++) {
+     for(var j=0; j<slist.length; j++) {
+       if(slist[j]===_iG[i]) {
+         _nXdata.push(inputXdata[i]);
+         _nYdata.push(inputYdata[i]);
+         _nGenes.push(_iG[i]);
+         continue;
+       }
+     }
+   }
+   window.console.log("new total..",_nGenes.length);
+   addLinePlotTrace(saveAMAplot,_nXdata,_nYdata,"rgb(0,0,0)",specialGenesTrace);
+   addRestyleChangesLinePlot(saveAMAplot,[_nGenes], [specialGenesTrace]);
+}
+
+function highlightGenes(action) {
+  var _c = document.getElementById('specialGenes');
+  if(_c)
+  if(action == 'Clear') {
+    highlightGenesToggle=false;
+    _c.value='';
+    } else if(action == 'Highlight') { 
+      highlightGenesToggle=true;
+  } else {
+    return;
+  } 
+  var _c = document.getElementById('specialGenes');
+  if(_c)
+    window.console.log(_c.value);
+
+  if(highlightGenesToggle) { // add the special trace
+window.console.log("adding special highlight..");
+    addSpecialGenesTrace(_c.value);
+    } else { // remove the special trace
+window.console.log("remove special highlight..");
+      removeLinePlotTrace(saveAMAplot, specialGenesTrace);
+  }
 }
 

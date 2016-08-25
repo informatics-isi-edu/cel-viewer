@@ -10,6 +10,22 @@ function addLinePlot(_data,_layout) {
    return aLinePlot;
 }
 
+function removeLinePlotTrace(aLinePlot,trace_id) {
+  var _data=aLinePlot.data;
+  if(_data.length <= trace_id) {
+    // no special gene trace in there.
+    } else {
+      Plotly.deleteTraces(aLinePlot, trace_id); //start with 0
+  }
+}
+
+function addLinePlotTrace(aLinePlot,x,y,color,trace_id) {
+//Plotly.addTraces(graphDiv, {y: [2,1,2]});
+  var update=makeOne(x,y,color);
+  update.mode="markers+text"; 
+  Plotly.addTraces(aLinePlot, update, [trace_id])
+}
+
 function relayoutLinePlot(aLinePlot,update) {
   relayoutAPlot(aLinePlot,update);
 }

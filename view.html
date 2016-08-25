@@ -45,12 +45,24 @@
 <!--- MAplot -->
 <div id='maplotControlBlock' class="control-block" style="display:none; margin:0 auto;">
    <div id="blackPtsSelecting" style="margin-top:50px">
-     <p>Plot points </p> 
+     <p>Plot points, </p> 
      <div id="myslider" class="col-md-12 no-padding" style="margin:10px">
        <div id="sliderBlackPtsMin" class="slider-min"></div>
        <div id="sliderBlackPtsRange" class="slider-value"></div>
        <div id="sliderBlackPtsMax" class="slider-max"></div>
        <div id='blackPts_slider'></div>
+     </div>
+   </div>
+   <div>
+     <div style="margin-top:100px;" >
+       <p>Highlight genes,(eg. Tnnt2 Myl3 Rgs5) </p>
+       <input type="text" class="col-md-8" style="margin-top:6px" id="specialGenes">
+     </div>
+     <div id="highlightGenes" class="btn-group" data-toggle="buttons" style="margin-left:20px">
+       <label class="btn btn-default">
+         <input type="radio" id="Highlight" name="linkage" autocomplete="off">Highlight</label>
+       <label class="btn btn-default active">
+         <input type="radio" id="Clear" name="linkage" autocomplete="off" checked>Clear</label>
      </div>
    </div>
 </div>
