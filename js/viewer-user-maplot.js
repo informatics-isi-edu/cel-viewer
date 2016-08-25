@@ -8,8 +8,6 @@
 // {
 // "meta": {
 //      "title": "10.5MndP 10.5MndD",
-//      "xlabel": "Average Expression",
-//      "ylabel": "proximal               Log2 Fold Change               distal", 
 //      "config": { // from configIt.R } 
 //         },
 //  "data" : {
@@ -20,18 +18,18 @@
 // }
 
 // blackPts
-var inputXData=null; 
-var inputYData=null; 
+var inputXdata=null; 
+var inputYdata=null; 
 var inputGenes=null;
 var inputTitle=null;
 
 // topPts
-var inputPXXData=null; 
-var inputPYYData=null; 
+var inputPXXdata=null; 
+var inputPYYdata=null; 
 var inputPGGenes=null;
 
-var inputNXXData=null; 
-var inputNYYData=null; 
+var inputNXXdata=null; 
+var inputNYYdata=null; 
 var inputNGGenes=null;
 
 var inputXlabel=null;
@@ -42,18 +40,18 @@ var rgTriColor= [ getColor(0), 'rgb(139,0,0)', 'rgb(0,139,0)' ];
 
 function initData() {
 // blackPts
-inputXData=null;
-inputYData=null;
+inputXdata=null;
+inputYdata=null;
 inputGenes=null;
 inputTitle=null;
 
 // topPts
-inputPXXData=null;
-inputPYYData=null;
+inputPXXdata=null;
+inputPYYdata=null;
 inputPGGenes=null;
 
-inputNXXData=null;
-inputNYYData=null;
+inputNXXdata=null;
+inputNYYdata=null;
 inputNGGenes=null;
 
 inputXlabel=null;
@@ -110,11 +108,16 @@ function convertMAplotBlobData(blob) {
 }
 
 function addCELMAplot() {
+
   var _xlabel=inputXlabel;
   var _ylabel=inputYlabel;
   var _title=inputTitle;
-  var _x=[inputXdata, inputPXXdata, inputNXXdata];
-  var _y=[inputYdata, inputPYYdata, inputNYYdata];
+
+  var _inputXdata=inputXdata.slice(0,3000);
+  var _inputYdata=inputYdata.slice(0,3000);
+
+  var _x=[_inputXdata, inputPXXdata, inputNXXdata];
+  var _y=[_inputYdata, inputPYYdata, inputNYYdata];
   var _colors=grTriColor;
   var _text=[inputPGGenes, inputNGGenes];
 
@@ -170,5 +173,94 @@ function addLayoutChangesLinePlot(_aPlot,_title,_x0,_x1,xtitle,xrange,_y0,_y1,yt
               }]
       };
   relayoutLinePlot(_aPlot,_update);
+}
+
+
+
+/** Change the displayed value for min, max and range when slider changes.
+ @param event
+ @param ui
+ @param string slider: Selector for the slider element
+ @param strign slider_min: Selector for the slider min label element
+ @param strign slider_min: Selector for the slider max label element
+ **/
+function changeSliderInputs(event, ui, slider, slider_min, slider_max){
+  var max=$(slider).slider("option","max"); // max value
+  var min=$(slider).slider("option","min"); // min value
+  var t=$(slider).slider("option","range"); // range value
+
+  var _min, _max; // values to be shown as min and max.
+  if(t === "max"){
+    _max = checkMax(ui.values[0], max, min) ? max : "";
+    _min = checkMin(ui.values[0], max, min) ? min : "";
+    $(slider+' span.ui-slider-handle').attr('data-before', ui.values[0]);
+  }else{
+    _max = checkMax(ui.values[0], max, min) && checkMax(ui.values[1], max, min) ? max : "";
+    _min = checkMin(ui.values[0], max, min) && checkMin(ui.values[1], max, min) ? min : "";
+
+    $(slider+' span.ui-slider-handle:nth-of-type(1)').attr('data-before', ui.values[0]);
+    $(slider+' span.ui-slider-handle:nth-of-type(2)').attr('data-before', ui.values[1]);
+  }
+  $(slider_min).text(_min);
+  $(slider_max).text(_max);
+}
+
+/*Check the value to see if it's appropriate to show maximum value in slider or not*/
+function checkMax(val, max, min){
+  return (max-val)/(max-min) > 0.1;
+}
+/*Check the value to see if it's appropriate to show minimum value in slider or not*/
+function checkMin(val, max, min){
+  return (val-min)/(max-min) > 0.1;
+}
+
+function setupMAplotControl() {
+  var _c = document.getElementById('maplotControlBlock');
+  if(_c)
+    _c.style.display = '';
+
+  var _min=0;
+  var _max=inputXdata.length;
+  var _tmp=1;
+  _max.toString(10).split("").reduce(function(tmp) {
+       _tmp=_tmp*10;
+  });
+  var _step=_tmp/10;
+  var _start=_min
+  var _end=_start+(_step*3);
+window.console.log(_start, " to ",_end);
+  jQuery("#blackPts_slider").slider({
+    min: _min,
+    step: _step,
+    max: _max,
+    values: [_min, _max],
+    change: function(event,ui) {
+      changeSliderInputs(event, ui, "#blackPts_slider", "#sliderBlackPtsMin", "#sliderBlackPtsMax");
+    },
+    slide: function(event, ui){
+      changeSliderInputs(event, ui, "#blackPts_slider", "#sliderBlackPtsMin", "#sliderBlackPtsMax");
+    },
+    stop:function(event,ui) {
+        updateBlackPts(ui.values);
+    },
+    create:function(event,ui) {
+        $("#sliderBlackPtsMin").text(_min);
+        $("#sliderBlackPtsMax").text(_max);
+    }
+  });
+  $("#blackPts_slider" ).slider( "option", "values", [_start,_end] );
+}
+
+
+
+function updateBlackPts(range) {
+  var _newXdata=inputXdata.slice(range[0], range[1]); 
+  var _newYdata=inputYdata.slice(range[0], range[1]); 
+  var _update = {
+    x:[_newXdata],
+    y:[_newYdata],
+  };
+window.console.log("here..",_newXdata.length);
+  restyleLinePlot(saveAMAplot,_update,[0]);
 }
 

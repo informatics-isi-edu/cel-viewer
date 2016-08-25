@@ -26,6 +26,7 @@ window.console.log("processing --",blob.meta.type);
           var blob=loadBlobFromJsonFile(urls[i]);
           convertMAplotBlobData(blob);
           saveAMAplot=addCELMAplot();
+          setupMAplotControl();
       }
     }
   } else {

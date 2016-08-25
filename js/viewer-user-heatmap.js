@@ -21,6 +21,9 @@ var orderedXlabel=[];
 var orderedYlabel=[];
 var tmpLabel=[];
 
+var saveGENEClusterDistance=null;
+var saveGENELinkage=null;
+
     // red to black to green
 var celColor= [ [0, 'rgb(255,0,0)'],
                  [0.3, 'rgb(100,0,0)'],
@@ -44,7 +47,6 @@ var withContour=false;
 //{
 // "meta": {
 // "type": "heatmap" 
-// "yylabel" : "log2" // for lineplot
 // "config" : { from configIt.R }
 //},
 //"data": {
@@ -231,7 +233,7 @@ function callHclust(distanceColumn,distanceRow,linkColumn,linkRow) {
     var tree = clusterfck.hcluster(data, distanceColumn,linkColumn);
   // tree is an array 
     postOrder(data,tree[0]);
-    } else {
+    } else { // no need to cluster, just keep it in order
       for(var i=0; i<data.length;i++)
         tmpLabel.push(i);
       orderedLeaf=data;
@@ -251,7 +253,6 @@ function callHclust(distanceColumn,distanceRow,linkColumn,linkRow) {
     var n_tree = clusterfck.hcluster(n_data, distanceRow, linkRow);
     postOrder(n_data,n_tree[0]);
     } else {
-window.console.log(n_data.length);
       for(var i=0; i<n_data.length; i++) {
         tmpLabel.push(i);
       }
@@ -267,8 +268,7 @@ function addCELHeatmap() {
   addCELAllHistogram();
 
   // distanceColumn, distanceRow,linkColumn,linkRow
-  callHclust(clusterfck.EUCLIDEAN_DISTANCE, clusterfck.EUCLIDEAN_DISTANCE,
-                     clusterfck.COMPLETE_LINKAGE, clusterfck.COMPLETE_LINKAGE);
+  callHclust(null, null, null, null);
 
   var _zval= orderedLeaf;
   var _xlabel= orderedXlabel;
@@ -323,15 +323,41 @@ function toggleContour(stype) {
 
 function updateGeneCluster(newDistance) { // this is to change the gene(column distance only)
 // newDistance, 'Eucliidean', 'Manhattan', or 'Max'
-
+  var _link=saveGENELinkage;
   if(newDistance == 'Euclidean') {
-    saveAHeatmapPlot=updateCELHeatmapClustering(clusterfck.EUCLIDEAN_DISTANCE, clusterfck.EUCLIDEAN_DISTANCE, clusterfck.COMPLETE_LINKAGE, clusterfck.COMPLETE_LINKAGE);
+    saveGENEClusterDistance=clusterfck.EUCLIDEAN_DISTANCE;
+    saveAHeatmapPlot=updateCELHeatmapClustering(saveGENEClusterDistance, clusterfck.EUCLIDEAN_DISTANCE, _link, clusterfck.COMPLETE_LINKAGE);
   } else if(newDistance == 'Manhattan') {
-    saveAHeatmapPlot=updateCELHeatmapClustering(clusterfck.MANHATTAN_DISTANCE, clusterfck.EUCLIDEAN_DISTANCE, clusterfck.COMPLETE_LINKAGE, clusterfck.COMPLETE_LINKAGE);
+    saveGENEClusterDistance=clusterfck.MANHATTAN_DISTANCE;
+    saveAHeatmapPlot=updateCELHeatmapClustering(saveGENEClusterDistance, clusterfck.EUCLIDEAN_DISTANCE, _link, clusterfck.COMPLETE_LINKAGE);
   }else if(newDistance == 'Max') {
-    saveAHeatmapPlot=updateCELHeatmapClustering(clusterfck.MAX_DISTANCE, clusterfck.EUCLIDEAN_DISTANCE, clusterfck.COMPLETE_LINKAGE, clusterfck.COMPLETE_LINKAGE);
-  } else if(newDistance == 'Correlation') {
-    saveAHeatmapPlot=updateCELHeatmapClustering(null,null,null,null);
+    saveGENEClusterDistance=clusterfck.MAX_DISTANCE;
+    saveAHeatmapPlot=updateCELHeatmapClustering(saveGENEClusterDistance, clusterfck.EUCLIDEAN_DISTANCE, _link, clusterfck.COMPLETE_LINKAGE);
+  } else if(newDistance == 'None') {
+    saveGENEClusterDistance=null;
+    saveAHeatmapPlot=updateCELHeatmapClustering(saveGENEClusterDistance,null,_link,null);
+  } else {
+    saveAHeatmapPlot=null;
+    return;
+  }
+  if(withContour) {
+    addStyleChangesHeatmapType(saveAHeatmapPlot, "contour", null);
+  }
+}
+
+function updateGeneLinkage(newLinkage) { 
+// only for genes side
+// newLinkage, 'Complete', 'Single', or 'Average'
+  var _distance=saveGENEClusterDistance;
+  if(newLinkage == 'Complete') {
+    saveGENELinkage=clusterfck.COMPLETE_LINKAGE;
+    saveAHeatmapPlot=updateCELHeatmapClustering(_distance, clusterfck.EUCLIDEAN_DISTANCE, saveGENELinkage, clusterfck.COMPLETE_LINKAGE);
+  } else if(newLinkage == 'Single') {
+    saveGENELinkage=clusterfck.SINGLE_LINKAGE;
+    saveAHeatmapPlot=updateCELHeatmapClustering(_distance, clusterfck.EUCLIDEAN_DISTANCE, saveGENELinkage, clusterfck.COMPLETE_LINKAGE);
+  }else if(newLinkage == 'Average') {
+    saveGENELinkage=clusterfck.AVERAGE_LINKAGE;
+    saveAHeatmapPlot=updateCELHeatmapClustering(_distance, clusterfck.EUCLIDEAN_DISTANCE, saveGENELinkage, clusterfck.COMPLETE_LINKAGE);
   } else {
     saveAHeatmapPlot=null;
     return;
@@ -350,11 +376,17 @@ function addStyleChangesHeatmapType(aPlot, newtype, target)
 
 
 function setupHeatmapControl() {
+  saveGENEClusterDistance=null;
+  saveGENELinkage=null;
   var _c = document.getElementById('heatmapControlBlock');
   _c.style.display = '';
   $("#geneClustering :input").change(function() {
 //    window.console.log(this); // points to the clicked input button
     updateGeneCluster(this.id);
+  });
+  $("#geneLinkage :input").change(function() {
+//    window.console.log(this); // points to the clicked input button
+    updateGeneLinkage(this.id);
   });
   $("#heatmapStyling :input").change(function() {
 //    window.console.log(this); // points to the clicked input button
