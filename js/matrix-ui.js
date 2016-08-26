@@ -146,7 +146,9 @@ function cellModal(cLabel, rLabel) {
 
   var _c='<div class="exp-div" data-toggle="modal" title="'+_title+
 		   '" data-target="#exp-modal" >';
-      _c += '<div class="two-exp exp-color-1"></div> <div class="two-exp exp-color-8"></div> <div class="modal-content">';
+      _c += '<div class="two-exp exp-color-1"></div>';
+      _c += '<div class="two-exp exp-color-8"></div>';
+      _c += '<div class="modal-content">';
       _c += '<h5> <a target="_blank" href="'+_datapath+'"> MAplot </a> </h5>';
       _c += '<h5> <a target="_blank" href="'+_datapath2+'"> Heatmap </a> </h5>';
       _c += ' </div> </div>';

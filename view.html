@@ -55,7 +55,7 @@
    </div>
    <div>
      <div style="margin-top:100px;" >
-       <p>Highlight genes,(eg. Tnnt2 Myl3 Rgs5) </p>
+       <p>Highlight one or more genes, (eg. Tnnt2 Myl3 Rgs5) </p>
        <input type="text" class="col-md-8" style="margin-top:6px" id="specialGenes">
      </div>
      <div id="highlightGenes" class="btn-group" data-toggle="buttons" style="margin-left:20px">
@@ -69,18 +69,16 @@
 <!--- heatmap -->
 <div id='heatmapControlBlock' class="control-block" style="display:none; margin:0 auto;">
    <div id="geneClustering" class="btn-group" data-toggle="buttons" style="margin:10px">
-     <p> Cluster genes </p> 
+     <p> Distance metric for clustering (genes) </p> 
      <label class="btn btn-default active">
-       <input type="radio" id="None" name="clustering" autocomplete="off" checked>None</label>
+       <input type="radio" id="Unordered" name="clustering" autocomplete="off" checked>Unordered</label>
      <label class="btn btn-default">
        <input type="radio" id="Euclidean" name="clustering" autocomplete="off">Euclidean distance</label>
      <label class="btn btn-default">
        <input type="radio" id="Manhattan" name="clustering" autocomplete="off">Manhattan distance</label>
-     <label class="btn btn-default">
-       <input type="radio" id="Max" name="clustering" autocomplete="off">Max distance</label>
    </div>
    <div id="geneLinkage" class="btn-group" data-toggle="buttons" style="margin:10px">
-     <p> Linking genes </p> 
+     <p> Linking criterion for clustering (genes) </p> 
      <label class="btn btn-default active">
        <input type="radio" id="Complete" name="linkage" autocomplete="off" checked>Complete linkage</label>
      <label class="btn btn-default">
@@ -89,7 +87,7 @@
        <input type="radio" id="Average" name="linkage" autocomplete="off">Average linkage</label>
    </div>
    <br>
-   <div id="heatmapStyling" class="btn-group" data-toggle="buttons" style="margin:10px">
+   <div id="heatmapStyling" class="btn-group" data-toggle="buttons" style="margin:10px; display:none;">
      <p> Style heatmap </p> 
      <label class="btn btn-default active">
        <input type="radio" id="Heatmap" name="styling" autocomplete="off" checked>Heatmap</label>

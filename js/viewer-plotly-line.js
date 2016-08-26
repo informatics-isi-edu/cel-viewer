@@ -19,10 +19,14 @@ function removeLinePlotTrace(aLinePlot,trace_id) {
   }
 }
 
+// for highlighted circles
 function addLinePlotTrace(aLinePlot,x,y,color,trace_id) {
 //Plotly.addTraces(graphDiv, {y: [2,1,2]});
   var update=makeOne(x,y,color);
   update.mode="markers+text"; 
+  update.marker.opacity=1;
+  update.marker.size=10;
+  update.marker.line.width=2;
   Plotly.addTraces(aLinePlot, update, [trace_id])
 }
 
@@ -37,7 +41,7 @@ function restyleLinePlot(aLinePlot, update, target) {
 
 function makeOne(xval,yval,cval) {
   var marker_val = { 
-      size:10, symbol:'circle', color:cval, opacity: 0.6,
+      size:8, symbol:'circle', color:cval, opacity: 0.8,
       line: {color: "black", width: 1}
       };
 

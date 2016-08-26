@@ -333,7 +333,7 @@ function updateGeneCluster(newDistance) { // this is to change the gene(column d
   }else if(newDistance == 'Max') {
     saveGENEClusterDistance=clusterfck.MAX_DISTANCE;
     saveAHeatmapPlot=updateCELHeatmapClustering(saveGENEClusterDistance, clusterfck.EUCLIDEAN_DISTANCE, _link, clusterfck.COMPLETE_LINKAGE);
-  } else if(newDistance == 'None') {
+  } else if(newDistance == 'Unordered') {
     saveGENEClusterDistance=null;
     saveAHeatmapPlot=updateCELHeatmapClustering(saveGENEClusterDistance,null,_link,null);
   } else {

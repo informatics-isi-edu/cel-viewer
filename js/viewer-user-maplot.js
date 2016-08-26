@@ -302,7 +302,7 @@ function addSpecialGenesTrace(glist){
      }
    }
    window.console.log("new total..",_nGenes.length);
-   addLinePlotTrace(saveAMAplot,_nXdata,_nYdata,"rgb(0,0,0)",specialGenesTrace);
+   addLinePlotTrace(saveAMAplot,_nXdata,_nYdata,"rgb(0,255,255)",specialGenesTrace);
    addRestyleChangesLinePlot(saveAMAplot,[_nGenes], [specialGenesTrace]);
 }
 
