@@ -73,9 +73,11 @@
      <label class="btn btn-default active">
        <input type="radio" id="Unordered" name="clustering" autocomplete="off" checked>Unordered</label>
      <label class="btn btn-default">
-       <input type="radio" id="Euclidean" name="clustering" autocomplete="off">Euclidean distance</label>
+       <input type="radio" id="Euclidean" name="clustering" autocomplete="off">Euclidean</label>
      <label class="btn btn-default">
-       <input type="radio" id="Manhattan" name="clustering" autocomplete="off">Manhattan distance</label>
+       <input type="radio" id="Manhattan" name="clustering" autocomplete="off">Manhattan</label>
+     <label class="btn btn-default">
+       <input type="radio" id="Pearson Correlation" name="clustering" autocomplete="off">Pearson Correlation</label>
    </div>
    <div id="geneLinkage" class="btn-group" data-toggle="buttons" style="margin:10px">
      <p> Linking criterion for clustering (genes) </p> 
@@ -86,6 +88,17 @@
      <label class="btn btn-default">
        <input type="radio" id="Average" name="linkage" autocomplete="off">Average linkage</label>
    </div>
+<!--
+   <div id="geneScaling" class="btn-group" data-toggle="buttons" style="margin:10px">
+     <p> Scaling method </p> 
+     <label class="btn btn-default active">
+       <input type="radio" id="None" name="clustering" autocomplete="off" checked>None</label>
+     <label class="btn btn-default">
+       <input type="radio" id="Z-score" name="clustering" autocomplete="off">Z-score</label>
+     <label class="btn btn-default">
+       <input type="radio" id="Mean-centering" name="clustering" autocomplete="off">Mean-centering</label>
+   </div>
+-->
    <br>
    <div id="heatmapStyling" class="btn-group" data-toggle="buttons" style="margin:10px; display:none;">
      <p> Style heatmap </p> 

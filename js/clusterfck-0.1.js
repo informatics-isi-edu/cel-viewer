@@ -144,7 +144,8 @@ var EUCLIDEAN_DISTANCE = function(v1, v2) {
   var total = 0;
   for(var i = 0; i < v1.length; i++)
     total += Math.pow(v2[i] - v1[i], 2)
-  return Math.sqrt(total);
+  var result= Math.sqrt(total);
+  return result;
 }
 
 var MANHATTAN_DISTANCE = function(v1, v2) {
@@ -161,6 +162,81 @@ var MAX_DISTANCE = function(v1, v2) {
   return max;
 }
 
+
+http://www.mathsisfun.com/data/correlation.html
+function Mean(Arr) {
+   var total=0;
+   for(var i=0;i<Arr.length;i+=1){
+       total+=Arr[i];
+   }
+   var mean = total/Arr.length;
+   return mean;
+}
+
+// PEARSON
+var CORRELATION_DISTANCE = function(v1, v2) {
+  if(v1.length != v2.length) {
+    window.console.log("BAD.., only same length is anticipated.");
+    return;
+  }
+
+//Step 1: Find the mean of x, and the mean of y
+  var m1=Mean(v1);
+  var m2=Mean(v2);
+
+//Step 2: Subtract the mean of x from every x value (call them "a"), do the same for y (call them "b")
+  var a=v1.map(function(v) { return v-m1; });
+  var b=v2.map(function(v) { return v-m2; });
+
+//Step 3: Calculate: a × b, a-power-2 and b-power-2 for every value
+//Step 4: Sum up a × b, sum up a-power-2 and sum up b-power-2
+
+  var total = 0;
+  var totala = 0;
+  var totalb = 0;
+  for(var i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+    totala += Math.pow(a[i],2);
+    totalb += Math.pow(b[i],2);;
+  }
+//Step 5: Divide the sum of a × b by the square root of [(sum of a2) × (sum of b2)]
+//  var p= ( total / (Math.sqrt(totala * totalb)));
+  var p= ( total / (totala * totalb));
+
+//https://en.wikipedia.org/wiki/Pearson_product-moment_correlation_coefficient
+//A distance metric for two variables X and Y known as Pearson's distance 
+// can be defined from their correlation coefficient as[27]
+//
+// d(X,Y)= 1 − p(X,Y)
+//Considering that the Pearson correlation coefficient falls between [−1, 1], 
+//the Pearson distance lies in [0, 2].
+  var d=1-p;
+  return d;
+}
+
+// http://www.itl.nist.gov/div898/software/dataplot/refman2/auxillar/corr_abs.htm
+var ABS_CORRELATION_DISTANCE = function(v1, v2) {
+  if(v1.length != v2.length) {
+    window.console.log("BAD.., only same length is anticipated.");
+    return;
+  }
+  var m1=Mean(v1);
+  var m2=Mean(v2);
+  var a=v1.map(function(v) { return v-m1; });
+  var b=v2.map(function(v) { return v-m2; });
+  var total = 0;
+  var totala = 0;
+  var totalb = 0;
+  for(var i = 0; i < a.length; i++) {
+    total += a[i] * b[i];
+    totala += Math.pow(a[i],2);
+    totalb += Math.pow(b[i],2);;
+  }
+  var p= ( total / (totala * totalb));
+  var d=1-p;
+  return d;
+}
+
 var hcluster = function(items, distance, merge, threshold, snapshot, snapshotCallback) {
   return (new HierarchicalClustering(distance, merge, threshold))
          .cluster(items, snapshot, snapshotCallback);
@@ -173,6 +249,8 @@ clusterfck = {
   AVERAGE_LINKAGE: AVERAGE_LINKAGE,
   EUCLIDEAN_DISTANCE: EUCLIDEAN_DISTANCE,
   MANHATTAN_DISTANCE: MANHATTAN_DISTANCE,
+  CORRELATION_DISTANCE: CORRELATION_DISTANCE,
+  ABS_CORRELATION_DISTANCE: ABS_CORRELATION_DISTANCE,
   MAX_DISTANCE: MAX_DISTANCE
 };
 

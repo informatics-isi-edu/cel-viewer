@@ -5,7 +5,7 @@
 // for, USC
 
 
-var inputData=[]; // this is in Matrix format [[..][..][..]]
+var inputData=[]; // this is in Matrix format [[..][..][..]], original 
 var inputSamples=[];
 var inputGenes=null;
 
@@ -23,6 +23,9 @@ var tmpLabel=[];
 
 var saveGENEClusterDistance=null;
 var saveGENELinkage=null;
+var saveGENEScaledData=null; // pts to inputData, inputDataMeanCenter, inputDataZScore
+var inputDataMeanCenter=null; 
+var inputDataZScore=null; 
 
     // red to black to green
 var celColor= [ [0, 'rgb(255,0,0)'],
@@ -65,6 +68,10 @@ function initData() {
   outputXlabel=null;
   outputYlabel=null;
   withContour=false;
+
+  saveGENEClusterDistance=null;
+  saveGENELinkage=null;
+  saveGENEScaledData=inputData;
 }
 
 // not really in use
@@ -119,6 +126,10 @@ function convertCELBlobData(blob) {
   fixValue(inputGenes);
   outputXlabel=inputGenes;
   outputYlabel=inputSamples;
+
+  saveGENEScaledData=inputData;
+//  inputDataMeanCenter=makeMeanCenterData(inputData);
+//  inputDataZScore=makeZScoreData(inputData); 
 }
 
 
@@ -219,10 +230,10 @@ function resetOrderedData() {
 }
 
 // rowOrder, columnOrder
-function callHclust(distanceColumn,distanceRow,linkColumn,linkRow) {
+function callHclust(_inputData,distanceColumn,distanceRow,linkColumn,linkRow) {
   resetOrderedData();
 
-  var data = inputData;
+  var data = _inputData;
   if(genesAt == 'vertical') {
   // transpose it
     data=transpose(data);
@@ -268,7 +279,7 @@ function addCELHeatmap() {
   addCELAllHistogram();
 
   // distanceColumn, distanceRow,linkColumn,linkRow
-  callHclust(null, null, null, null);
+  callHclust(saveGENEScaledData, null, null, null, null);
 
   var _zval= orderedLeaf;
   var _xlabel= orderedXlabel;
@@ -286,7 +297,7 @@ linkColumn, linkRow){
   removeHeatmapPlot();
   addCELAllHistogram();
 
-  callHclust(distanceColumn, distanceRow, linkColumn, linkRow);
+  callHclust(saveGENEScaledData, distanceColumn, distanceRow, linkColumn, linkRow);
 
   var _zval= orderedLeaf;
   var _xlabel= orderedXlabel;
@@ -321,47 +332,66 @@ function toggleContour(stype) {
   }
 }
 
-function updateGeneCluster(newDistance) { // this is to change the gene(column distance only)
-// newDistance, 'Eucliidean', 'Manhattan', or 'Max'
-  var _link=saveGENELinkage;
+function updateHeatmapPlot() {
+  var _aPlot=updateCELHeatmapClustering(saveGENEClusterDistance,
+      clusterfck.EUCLIDEAN_DISTANCE, saveGENELinkage, clusterfck.COMPLETE_LINKAGE);
+  return _aPlot;
+}
+
+// this is to change the gene(column distance only)
+// newDistance, 'Euclidean', 'Manhattan', or 'Max'
+function updateGeneCluster(newDistance) { 
   if(newDistance == 'Euclidean') {
     saveGENEClusterDistance=clusterfck.EUCLIDEAN_DISTANCE;
-    saveAHeatmapPlot=updateCELHeatmapClustering(saveGENEClusterDistance, clusterfck.EUCLIDEAN_DISTANCE, _link, clusterfck.COMPLETE_LINKAGE);
   } else if(newDistance == 'Manhattan') {
     saveGENEClusterDistance=clusterfck.MANHATTAN_DISTANCE;
-    saveAHeatmapPlot=updateCELHeatmapClustering(saveGENEClusterDistance, clusterfck.EUCLIDEAN_DISTANCE, _link, clusterfck.COMPLETE_LINKAGE);
-  }else if(newDistance == 'Max') {
-    saveGENEClusterDistance=clusterfck.MAX_DISTANCE;
-    saveAHeatmapPlot=updateCELHeatmapClustering(saveGENEClusterDistance, clusterfck.EUCLIDEAN_DISTANCE, _link, clusterfck.COMPLETE_LINKAGE);
+  }else if(newDistance == 'Pearson Correlation') {
+    saveGENEClusterDistance=clusterfck.CORRELATION_DISTANCE;
+  }else if(newDistance == 'Absolute Correlation') {
+    saveGENEClusterDistance=clusterfck.ABS_CORRELATION_DISTANCE;
   } else if(newDistance == 'Unordered') {
     saveGENEClusterDistance=null;
-    saveAHeatmapPlot=updateCELHeatmapClustering(saveGENEClusterDistance,null,_link,null);
   } else {
     saveAHeatmapPlot=null;
     return;
   }
+  saveAHeatmapPlot=updateHeatmapPlot();
   if(withContour) {
     addStyleChangesHeatmapType(saveAHeatmapPlot, "contour", null);
   }
 }
 
-function updateGeneLinkage(newLinkage) { 
 // only for genes side
 // newLinkage, 'Complete', 'Single', or 'Average'
-  var _distance=saveGENEClusterDistance;
+function updateGeneLinkage(newLinkage) { 
   if(newLinkage == 'Complete') {
     saveGENELinkage=clusterfck.COMPLETE_LINKAGE;
-    saveAHeatmapPlot=updateCELHeatmapClustering(_distance, clusterfck.EUCLIDEAN_DISTANCE, saveGENELinkage, clusterfck.COMPLETE_LINKAGE);
   } else if(newLinkage == 'Single') {
     saveGENELinkage=clusterfck.SINGLE_LINKAGE;
-    saveAHeatmapPlot=updateCELHeatmapClustering(_distance, clusterfck.EUCLIDEAN_DISTANCE, saveGENELinkage, clusterfck.COMPLETE_LINKAGE);
   }else if(newLinkage == 'Average') {
     saveGENELinkage=clusterfck.AVERAGE_LINKAGE;
-    saveAHeatmapPlot=updateCELHeatmapClustering(_distance, clusterfck.EUCLIDEAN_DISTANCE, saveGENELinkage, clusterfck.COMPLETE_LINKAGE);
   } else {
     saveAHeatmapPlot=null;
     return;
   }
+  saveAHeatmapPlot=updateHeatmapPlot();
+  if(withContour) {
+    addStyleChangesHeatmapType(saveAHeatmapPlot, "contour", null);
+  }
+}
+
+function updateGeneScaling(newScaling) { 
+  if(newScaling == 'None') {
+    saveGENEScaledData=inputData;
+  } else if(newScaling == 'Mean-centering') {
+    saveGENEScaledData=inputDataMeanCenter;
+  }else if(newScaling == 'Z-score') {
+    saveGENEScaledData=inputDataZScore;
+  } else {
+    saveAHeatmapPlot=null;
+    return;
+  }
+  saveAHeatmapPlot=updateHeatmapPlot();
   if(withContour) {
     addStyleChangesHeatmapType(saveAHeatmapPlot, "contour", null);
   }
@@ -377,21 +407,25 @@ function addStyleChangesHeatmapType(aPlot, newtype, target)
 
 function setupHeatmapControl() {
   saveGENEClusterDistance=null;
-  saveGENELinkage=null;
+  saveGENELinkage=clusterfck.COMPLETE_LINKAGE;
+  saveGENEScaledData=inputData;
+
   var _c = document.getElementById('heatmapControlBlock');
   _c.style.display = '';
   $("#geneClustering :input").change(function() {
-//    window.console.log(this); // points to the clicked input button
     updateGeneCluster(this.id);
   });
   $("#geneLinkage :input").change(function() {
-//    window.console.log(this); // points to the clicked input button
     updateGeneLinkage(this.id);
   });
+  $("#geneScaling :input").change(function() {
+    updateGeneScaling(this.id);
+  });
+/*
   $("#heatmapStyling :input").change(function() {
-//    window.console.log(this); // points to the clicked input button
      toggleContour(this.id); 
   });
+*/
 }
 
 
@@ -412,7 +446,7 @@ function resetBuildData() {
 
 function buildDataComplete() {
    resetBuildData();
-   var _data=inputData;
+   var _data=saveGENEScaledData;
    var rows=_data.length;
    for( var i=0; i< rows; i++) {
 //     var vals = Object.values(_data[i]);
@@ -427,9 +461,9 @@ function buildDataComplete() {
 
 function buildDataByGenes() {
    resetBuildData();
-   var _data=inputData;
+   var _data=saveGENEScaledData;
    if(genesAt == 'horizontal') { 
-     _data=transpose(inputData);
+     _data=transpose(saveGENEScaledData);
    }
    var rows=_data.length;
    for( var i=0; i< rows; i++) {
@@ -444,7 +478,7 @@ function buildDataByGenes() {
 
 function buildDataBySamples() {
    resetBuildData();
-   var _data=inputData;
+   var _data=saveGENEScaledData;
    if(genesAt == 'vertical') { 
      _data=transpose(inputData);
    }
@@ -537,3 +571,74 @@ function addCELAllHistogram() {
 
 
 /*********************************************/
+function makeMeanCenterData(iMatrix) { // takes array of arrays
+  var matrixData=iMatrix; 
+  var iArray= matrixData.reduce(function(curr, next){ 
+         return curr.concat(next);
+        });
+  var mean=getMean(iArray);
+
+  window.console.log(mean);
+  // create an matrix of z-score
+  var mMatrix=[];
+  for(var i=0; i<iMatrix.length; i++) {
+    var n=iMatrix[i];
+    // (val - mean)
+    var nn=n.map(function(val) {
+       return (val - mean); 
+    });
+    mMatrix.push(nn);
+  }
+  return mMatrix;
+}
+
+function makeZScoreData(iMatrix) { // takes array of arrays
+  var matrixData=iMatrix; 
+  var iArray= matrixData.reduce(function(curr, next){ 
+         return curr.concat(next);
+        });
+  var r=getMeanAndStandardDev(iArray);
+  var mean=r[0];
+  var sd=r[1];
+  window.console.log(mean);
+  window.console.log(sd);
+  // create an matrix of z-score
+  var zMatrix=[];
+  for(var i=0; i<iMatrix.length; i++) {
+    var n=iMatrix[i];
+    // (val - mean)/sd
+    var nn=n.map(function(val) {
+       return (val - mean)/sd; 
+    });
+    zMatrix.push(nn);
+  }
+  return zMatrix;
+}
+
+function getMean(inputArr) {
+   var _inputData=inputArr;
+   var total=0;
+
+   for(var i=0;i<_inputData.length;i+=1){
+       total+=_inputData[i];
+   }
+   var mean = total/_inputData.length;
+   return mean;
+}
+
+//http://stackoverflow.com/questions/7343890/standard-deviation-javascript
+function getMeanAndStandardDev(inputArr) {
+   var _inputData=inputArr;
+
+   var diffSqredArr = [];
+   var mean = getMean(_inputData);
+
+   for(var j=0;j<_inputData.length;j+=1){
+       diffSqredArr.push(Math.pow((_inputData[j]-mean),2));
+   }
+   var sd=(Math.sqrt(diffSqredArr.reduce(function(curr, next){
+            return curr + next;
+          })/_inputData.length));
+
+   return [ mean, sd ];
+};
