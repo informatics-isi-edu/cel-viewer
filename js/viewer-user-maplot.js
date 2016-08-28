@@ -139,6 +139,10 @@ function addCELMAplot() {
   for(var i=0; i<_x.length;i++) {
     _data[i].name="";
   }
+/*
+  _data[0].mode="markers+text";
+  _data[0].text=inputGenes;
+*/
   var _layout=getLinesDefaultLayout(1000, 400);
   _layout.hovermode="closest";
   _layout.shapes= [{ type: 'rect',
@@ -244,7 +248,6 @@ function setupMAplotControl() {
   var _step=_tmp/10;
   var _start=_min
   var _end=_start+(_step);
-window.console.log(_start, " to ",_end);
   jQuery("#blackPts_slider").slider({
     min: _min,
     step: _step,
@@ -271,14 +274,12 @@ window.console.log(_start, " to ",_end);
 
 
 function updateBlackPts(range) {
-window.console.log("calling updateBackPts..");
   var _newXdata=inputXdata.slice(range[0], range[1]); 
   var _newYdata=inputYdata.slice(range[0], range[1]); 
   var _update = {
     x:[_newXdata],
     y:[_newYdata],
   };
-window.console.log("here..",_newXdata.length);
   restyleLinePlot(saveAMAplot,_update,[0]);
 }
 
@@ -289,7 +290,6 @@ function addSpecialGenesTrace(glist){
    var _nYdata=[];
    var _nGenes=[];
    var slist=glist.split(" ");
-   window.console.log("slist is..",slist);
    var _iG=inputGenes;
    for(var i=0; i<_iG.length;i++) {
      for(var j=0; j<slist.length; j++) {
@@ -301,31 +301,26 @@ function addSpecialGenesTrace(glist){
        }
      }
    }
-   window.console.log("new total..",_nGenes.length);
    addLinePlotTrace(saveAMAplot,_nXdata,_nYdata,"rgb(0,255,255)",specialGenesTrace);
    addRestyleChangesLinePlot(saveAMAplot,[_nGenes], [specialGenesTrace]);
 }
 
 function highlightGenes(action) {
   var _c = document.getElementById('specialGenes');
-  if(_c)
+  if(_c) {
   if(action == 'Clear') {
     highlightGenesToggle=false;
     _c.value='';
     } else if(action == 'Highlight') { 
       highlightGenesToggle=true;
+  }
   } else {
     return;
   } 
-  var _c = document.getElementById('specialGenes');
-  if(_c)
-    window.console.log(_c.value);
 
   if(highlightGenesToggle) { // add the special trace
-window.console.log("adding special highlight..");
     addSpecialGenesTrace(_c.value);
     } else { // remove the special trace
-window.console.log("remove special highlight..");
       removeLinePlotTrace(saveAMAplot, specialGenesTrace);
   }
 }
