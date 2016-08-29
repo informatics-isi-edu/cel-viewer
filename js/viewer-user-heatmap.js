@@ -245,10 +245,20 @@ function callHclust(_inputData,distanceColumn,distanceRow,linkColumn,linkRow) {
   // tree is an array 
     postOrder(data,tree[0]);
     } else { // no need to cluster, just keep it in order
-      for(var i=0; i<data.length;i++)
-        tmpLabel.push(i);
-      orderedLeaf=data;
+      var xlist=outputXlabel.slice(); // duplicate a copy
+      var ndata=[];
+      xlist.sort();
+      for(var i=0;i<xlist.length;i++) {
+        var p=xlist[i];
+        window.console.log(p);
+        var idx=outputXlabel.indexOf(p);
+        window.console.log(idx);
+        tmpLabel.push(idx);
+        ndata.push(data[idx]);
+      }
+      orderedLeaf=ndata;
   }
+
 
   window.console.log("new X order-->");
   window.console.log(tmpLabel.toString());
@@ -349,7 +359,7 @@ function updateGeneCluster(newDistance) {
     saveGENEClusterDistance=clusterfck.CORRELATION_DISTANCE;
   }else if(newDistance == 'Absolute Correlation') {
     saveGENEClusterDistance=clusterfck.ABS_CORRELATION_DISTANCE;
-  } else if(newDistance == 'Unordered') {
+  } else if(newDistance == 'Alphabetical') {
     saveGENEClusterDistance=null;
   } else {
     saveAHeatmapPlot=null;
