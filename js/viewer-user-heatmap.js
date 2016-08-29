@@ -250,9 +250,7 @@ function callHclust(_inputData,distanceColumn,distanceRow,linkColumn,linkRow) {
       xlist.sort();
       for(var i=0;i<xlist.length;i++) {
         var p=xlist[i];
-        window.console.log(p);
         var idx=outputXlabel.indexOf(p);
-        window.console.log(idx);
         tmpLabel.push(idx);
         ndata.push(data[idx]);
       }
