@@ -316,7 +316,7 @@ function addSpecialGenesTrace(glist){
      }
    }
    addSpecialLinePlotTrace(saveAMAplot,_nXdata,_nYdata,"rgb(0,255,255)",specialGenesTrace);
-   addSpecialRestyleLinePlot(saveAMAplot, [_nGenes], specialGenesTrace);
+   addSpecialRestyleLinePlot(saveAMAplot, [_nGenes],"rgb(0,255,255)", specialGenesTrace);
 }
 
 function addSpecialLinePlotTrace(aPlot,x,y,color,trace) {
@@ -328,10 +328,11 @@ function addSpecialLinePlotTrace(aPlot,x,y,color,trace) {
   addLinePlotTrace(aPlot,update, [trace]);
 }
 
-function addSpecialRestyleLinePlot(aPlot,_text, trace) {
+function addSpecialRestyleLinePlot(aPlot,_text,_color, trace) {
   var _update = {
     text:_text,
-    textfont : { family:'Times New Roman' },
+    textfont : { family:'Times New Roman', color:_color },
+//    textfont : { family:'Times New Roman' },
     textposition: 'middle right',
     mode: 'markers+text',
   }
