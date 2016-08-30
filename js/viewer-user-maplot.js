@@ -283,6 +283,20 @@ function updateBlackPts(range) {
   restyleLinePlot(saveAMAplot,_update,[0]);
 }
 
+function suppressTextLabels(target) {
+  var _update = {
+    mode:"markers"
+  };
+  restyleLinePlot(saveAMAplot,_update,target);
+}
+
+function enableTextLabels(target) {
+  var _update = {
+    mode:"markers+text"
+  };
+  restyleLinePlot(saveAMAplot,_update,target);
+}
+
 
 // always the 4th trace
 function addSpecialGenesTrace(glist){
@@ -301,9 +315,29 @@ function addSpecialGenesTrace(glist){
        }
      }
    }
-   addLinePlotTrace(saveAMAplot,_nXdata,_nYdata,"rgb(0,255,255)",specialGenesTrace);
-   addRestyleChangesLinePlot(saveAMAplot,[_nGenes], [specialGenesTrace]);
+   addSpecialLinePlotTrace(saveAMAplot,_nXdata,_nYdata,"rgb(0,255,255)",specialGenesTrace);
+   addSpecialRestyleLinePlot(saveAMAplot, [_nGenes], specialGenesTrace);
 }
+
+function addSpecialLinePlotTrace(aPlot,x,y,color,trace) {
+  var update=makeLinePlotTrace(x,y,color);
+  update.mode="markers+text";
+  update.marker.opacity=1;
+  update.marker.size=10;
+  update.marker.line.width=2;
+  addLinePlotTrace(aPlot,update, [trace]);
+}
+
+function addSpecialRestyleLinePlot(aPlot,_text, trace) {
+  var _update = {
+    text:_text,
+    textfont : { family:'Times New Roman' },
+    textposition: 'middle right',
+    mode: 'markers+text',
+  }
+  restyleLinePlot(aPlot,_update,[trace]);
+}
+
 
 function highlightGenes(action) {
   var _c = document.getElementById('specialGenes');
@@ -320,8 +354,10 @@ function highlightGenes(action) {
 
   if(highlightGenesToggle) { // add the special trace
     addSpecialGenesTrace(_c.value);
+//    suppressTextLabels([1]);
     } else { // remove the special trace
       removeLinePlotTrace(saveAMAplot, specialGenesTrace);
+//      enableTextLabels([1]);
   }
 }
 

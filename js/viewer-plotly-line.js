@@ -20,14 +20,14 @@ function removeLinePlotTrace(aLinePlot,trace_id) {
 }
 
 // for highlighted circles
-function addLinePlotTrace(aLinePlot,x,y,color,trace_id) {
+function makeLinePlotTrace(x,y,color) {
 //Plotly.addTraces(graphDiv, {y: [2,1,2]});
   var update=makeOne(x,y,color);
-  update.mode="markers+text"; 
-  update.marker.opacity=1;
-  update.marker.size=10;
-  update.marker.line.width=2;
-  Plotly.addTraces(aLinePlot, update, [trace_id])
+  return update;
+}
+
+function addLinePlotTrace(aLinePlot,update, target) {
+  Plotly.addTraces(aLinePlot, update, target);
 }
 
 function relayoutLinePlot(aLinePlot,update) {
