@@ -229,6 +229,32 @@ function resetOrderedData() {
   tmpLabel=[];
 }
 
+
+
+//http://stackoverflow.com/questions/15478954/sort-array-elements-string-with-numbers-natural-sort
+var chunkRgx = /(_+)|([0-9]+)|([^0-9_]+)/g;
+function naturalCompare(a, b) {
+    var ax = [], bx = [];
+    
+    a.replace(chunkRgx, function(_, $1, $2, $3) {
+        ax.push([$1 || "0", $2 || Infinity, $3 || ""])
+    });
+    b.replace(chunkRgx, function(_, $1, $2, $3) {
+        bx.push([$1 || "0", $2 || Infinity, $3 || ""])
+    });
+    
+    while(ax.length && bx.length) {
+        var an = ax.shift();
+        var bn = bx.shift();
+        var nn = an[0].localeCompare(bn[0]) || 
+                 (an[1] - bn[1]) || 
+                 an[2].localeCompare(bn[2]);
+        if(nn) return nn;
+    }
+    
+    return ax.length - bx.length;
+}
+
 // rowOrder, columnOrder
 function callHclust(_inputData,distanceColumn,distanceRow,linkColumn,linkRow) {
   resetOrderedData();
@@ -247,7 +273,7 @@ function callHclust(_inputData,distanceColumn,distanceRow,linkColumn,linkRow) {
     } else { // no need to cluster, just keep it in order
       var xlist=outputXlabel.slice(); // duplicate a copy
       var ndata=[];
-      xlist.sort();
+      xlist.sort(naturalCompare);
       for(var i=0;i<xlist.length;i++) {
         var p=xlist[i];
         var idx=outputXlabel.indexOf(p);
